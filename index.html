@@ -1,0 +1,2686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physics TA Hub — UIUC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --orange:     #E84A00;
+  --orange-lt:  #FFF0EA;
+  --orange-md:  #FFD4C0;
+  --blue:       #13294B;
+  --blue-lt:    #E8EEF6;
+  --blue-md:    #C2D0E4;
+  --sand:       #F5F3EE;
+  --sand-2:     #EAE7E0;
+  --sand-3:     #D8D4CB;
+  --white:      #FFFFFF;
+  --ink:        #1A1814;
+  --ink-2:      #4A4740;
+  --ink-3:      #8A877E;
+  --green:      #1A6B3C;
+  --green-lt:   #E8F5EE;
+  --purple:     #5B3FA6;
+  --purple-lt:  #F0ECFC;
+  --teal:       #0B6E6E;
+  --teal-lt:    #E6F4F4;
+  --serif:      'Inter', sans-serif;
+  --sans:       'Inter', sans-serif;
+  --mono:       'DM Mono', monospace;
+  --radius:     12px;
+  --radius-sm:  8px;
+  --shadow:     0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  --shadow-md:  0 2px 8px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.06);
+}
+
+html, body { height: 100%; }
+
+body {
+  font-family: var(--sans);
+  background: var(--sand);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── LAYOUT ── */
+.app { display: flex; height: 100vh; overflow: hidden; }
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--blue);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-top {
+  padding: 28px 20px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.logo-mark {
+  width: 36px;
+  height: 36px;
+  background: var(--orange);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.logo-mark svg { width: 18px; height: 18px; }
+
+.logo-text { line-height: 1.2; }
+.logo-text .title { font-family: var(--sans); font-size: 15px; color: #fff; font-weight: 600; letter-spacing: -0.01em; }
+.logo-text .sub { font-size: 10px; color: rgba(255,255,255,0.45); font-family: var(--mono); letter-spacing: 0.05em; margin-top: 1px; }
+
+/* Role badge */
+.role-switcher {
+  margin-top: 14px;
+  display: flex;
+  gap: 4px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.role-btn {
+  flex: 1;
+  padding: 5px 0;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.45);
+  font-size: 10px;
+  font-family: var(--mono);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.03em;
+}
+
+.role-btn.active {
+  background: var(--orange);
+  color: #fff;
+}
+
+/* Nav */
+.sidebar-nav {
+  flex: 1;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+}
+
+.nav-section-label {
+  font-size: 10px;
+  font-family: var(--mono);
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.08em;
+  padding: 10px 8px 6px;
+  text-transform: uppercase;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  color: rgba(255,255,255,0.55);
+  font-size: 13.5px;
+  font-family: var(--sans);
+}
+
+.nav-item:hover { background: rgba(255,255,255,0.07); color: rgba(255,255,255,0.85); }
+
+.nav-item.active {
+  background: rgba(232,74,0,0.18);
+  color: #fff;
+}
+
+.nav-item.active .nav-icon { color: var(--orange); }
+
+.nav-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+.nav-item.active .nav-icon { opacity: 1; }
+
+.nav-badge {
+  margin-left: auto;
+  font-size: 10px;
+  font-family: var(--mono);
+  background: var(--orange);
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 20px;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Sidebar bottom */
+.sidebar-bottom {
+  padding: 14px 12px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.user-card:hover { background: rgba(255,255,255,0.06); }
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.user-info .name { font-size: 12px; color: rgba(255,255,255,0.85); font-weight: 500; }
+.user-info .role { font-size: 10px; color: rgba(255,255,255,0.4); font-family: var(--mono); }
+
+/* ── MAIN ── */
+.main {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--sand-2);
+  padding: 0 32px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar-title { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+.topbar-sub   { font-size: 12px; color: var(--ink-3); margin-left: 2px; }
+
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--sand);
+  border: 1px solid var(--sand-2);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  width: 220px;
+}
+
+.search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 13px;
+  font-family: var(--sans);
+  color: var(--ink);
+  width: 100%;
+}
+.search-box input::placeholder { color: var(--ink-3); }
+
+.icon-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--sand-2);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--ink-2);
+}
+.icon-btn:hover { background: var(--sand); border-color: var(--sand-3); }
+
+/* ── PAGE CONTENT ── */
+.page { padding: 32px; flex: 1; }
+.page.hidden { display: none; }
+
+/* ── DASHBOARD ── */
+.welcome-banner {
+  background: var(--blue);
+  border-radius: 16px;
+  padding: 28px 32px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+.welcome-banner::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: var(--orange);
+  border-radius: 50%;
+  opacity: 0.12;
+}
+
+.welcome-text h2 {
+  font-family: var(--sans);
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+.welcome-text p { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
+.welcome-meta {
+  margin-left: auto;
+  text-align: right;
+  flex-shrink: 0;
+}
+.welcome-meta .date { font-size: 11px; font-family: var(--mono); color: rgba(255,255,255,0.35); }
+.welcome-meta .course { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 4px; font-weight: 500; }
+
+/* Stats row */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--sand-2);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  transition: box-shadow 0.15s;
+}
+.stat-card:hover { box-shadow: var(--shadow); }
+
+.stat-card .stat-label { font-size: 11px; color: var(--ink-3); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+.stat-card .stat-value { font-size: 28px; font-weight: 600; letter-spacing: -0.03em; line-height: 1; }
+.stat-card .stat-sub   { font-size: 11px; color: var(--ink-3); margin-top: 4px; }
+
+.stat-card.orange .stat-value { color: var(--orange); }
+.stat-card.blue   .stat-value { color: var(--blue); }
+.stat-card.green  .stat-value { color: var(--green); }
+.stat-card.purple .stat-value { color: var(--purple); }
+
+/* Module cards grid */
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.module-card {
+  background: var(--white);
+  border: 1px solid var(--sand-2);
+  border-radius: 16px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.module-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--sand-3);
+}
+
+.module-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.module-card:hover::after { opacity: 1; }
+
+.module-card.grading::after    { background: var(--orange); }
+.module-card.materials::after  { background: var(--blue); }
+.module-card.teaching::after   { background: var(--purple); }
+.module-card.comms::after      { background: var(--teal); }
+
+.module-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.module-icon.orange  { background: var(--orange-lt); color: var(--orange); }
+.module-icon.blue    { background: var(--blue-lt);   color: var(--blue); }
+.module-icon.purple  { background: var(--purple-lt); color: var(--purple); }
+.module-icon.teal    { background: var(--teal-lt);   color: var(--teal); }
+
+.module-info h3 { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 4px; }
+.module-info p  { font-size: 12px; color: var(--ink-3); line-height: 1.5; }
+
+.module-arrow {
+  margin-left: auto;
+  align-self: flex-end;
+  color: var(--sand-3);
+  transition: color 0.15s, transform 0.15s;
+}
+.module-card:hover .module-arrow { color: var(--ink-2); transform: translateX(3px); }
+
+.module-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid var(--sand-2);
+}
+
+.module-status {
+  font-size: 11px;
+  font-family: var(--mono);
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+.status-ready    { background: var(--green-lt);  color: var(--green); }
+.status-setup    { background: var(--orange-lt); color: var(--orange); }
+.status-soon     { background: var(--sand-2);    color: var(--ink-3); }
+
+/* ── MATERIALS PAGE ── */
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.page-header h1 { font-family: var(--sans); font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+.page-header p  { font-size: 13px; color: var(--ink-3); margin-top: 4px; }
+
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  background: var(--white);
+  border: 1px solid var(--sand-2);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.filter-btn {
+  padding: 7px 14px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  font-family: var(--sans);
+  font-weight: 500;
+  color: var(--ink-3);
+  cursor: pointer;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+.filter-btn.active { background: var(--blue); color: #fff; }
+.filter-btn:not(.active):hover { background: var(--sand); color: var(--ink); }
+
+.chip-select {
+  padding: 7px 12px;
+  border: 1px solid var(--sand-2);
+  border-radius: var(--radius-sm);
+  background: var(--white);
+  font-size: 12px;
+  font-family: var(--sans);
+  color: var(--ink);
+  cursor: pointer;
+  outline: none;
+}
+
+.spacer { flex: 1; }
+
+/* File grid */
+.file-section { margin-bottom: 28px; }
+.file-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.file-section-header h3 { font-size: 13px; font-weight: 600; }
+.file-count {
+  font-size: 10px;
+  font-family: var(--mono);
+  background: var(--sand-2);
+  color: var(--ink-3);
+  padding: 2px 7px;
+  border-radius: 20px;
+}
+.section-line { flex: 1; height: 1px; background: var(--sand-2); }
+
+.files-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.file-card {
+  background: var(--white);
+  border: 1px solid var(--sand-2);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: default;
+  transition: all 0.15s;
+}
+.file-card:hover { box-shadow: var(--shadow); border-color: var(--sand-3); }
+
+.file-card-top { display: flex; align-items: flex-start; justify-content: space-between; }
+
+.file-type-icon {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.type-quiz     { background: var(--orange-lt); color: var(--orange); }
+.type-packet   { background: var(--blue-lt);   color: var(--blue); }
+.type-lab      { background: var(--green-lt);  color: var(--green); }
+.type-slides   { background: var(--purple-lt); color: var(--purple); }
+.type-other    { background: var(--sand-2);    color: var(--ink-3); }
+
+.type-tag {
+  font-size: 9px;
+  font-family: var(--mono);
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 20px;
+  letter-spacing: 0.03em;
+}
+.tag-quiz   { background: var(--orange-lt); color: var(--orange); }
+.tag-packet { background: var(--blue-lt);   color: var(--blue); }
+.tag-lab    { background: var(--green-lt);  color: var(--green); }
+.tag-slides { background: var(--purple-lt); color: var(--purple); }
+.tag-other  { background: var(--sand-2);    color: var(--ink-3); }
+
+.file-name { font-size: 12px; font-weight: 500; line-height: 1.4; letter-spacing: -0.01em; }
+.file-meta { font-size: 10px; color: var(--ink-3); font-family: var(--mono); }
+
+.dl-btn {
+  width: 100%;
+  padding: 7px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--blue);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  font-family: var(--sans);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  transition: background 0.15s;
+}
+.dl-btn:hover { background: #0d1f38; }
+
+/* ── GRADING PAGE ── */
+.grading-table {
+  background: var(--white);
+  border: 1px solid var(--sand-2);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1fr 1fr 1fr 80px;
+  gap: 0;
+  padding: 11px 20px;
+  background: var(--sand);
+  border-bottom: 1px solid var(--sand-2);
+  font-size: 11px;
+  font-family: var(--mono);
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 1fr 1fr 1fr 80px;
+  gap: 0;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--sand-2);
+  font-size: 13px;
+  align-items: center;
+  transition: background 0.1s;
+}
+.table-row:last-child { border-bottom: none; }
+.table-row:hover { background: var(--sand); }
+
+.progress-bar {
+  height: 4px;
+  background: var(--sand-2);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--orange);
+  transition: width 0.3s;
+}
+
+.grade-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--mono);
+}
+.grade-pending  { background: var(--sand-2);    color: var(--ink-3); }
+.grade-grading  { background: var(--orange-lt); color: var(--orange); }
+.grade-done     { background: var(--green-lt);  color: var(--green); }
+
+/* ── TEACHING PAGE ── */
+.teaching-layout { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+
+.journal-area textarea {
+  width: 100%;
+  min-height: 180px;
+  border: 1px solid var(--sand-2);
+  border-radius: var(--radius);
+  padding: 16px;
+  font-size: 14px;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--white);
+  outline: none;
+  resize: vertical;
+  line-height: 1.6;
+  transition: border-color 0.15s;
+}
+.journal-area textarea:focus { border-color: var(--blue-md); }
+
+.tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0; }
+.mood-tag {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--sand-2);
+  background: var(--white);
+  cursor: pointer;
+  transition: all 0.12s;
+  font-family: var(--sans);
+}
+.mood-tag.active { border-color: var(--blue); background: var(--blue-lt); color: var(--blue); font-weight: 500; }
+.mood-tag:not(.active):hover { background: var(--sand); }
+
+.submit-btn {
+  padding: 10px 24px;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.submit-btn:hover { background: #0d1f38; }
+
+.insight-card {
+  background: var(--white);
+  border: 1px solid var(--sand-2);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.insight-card .label { font-size: 10px; font-family: var(--mono); color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+.insight-card .value { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: var(--blue); }
+.insight-card .sub   { font-size: 11px; color: var(--ink-3); margin-top: 3px; }
+
+/* ── COMMS PAGE ── */
+.comms-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+.message-thread {
+  background: var(--white);
+  border: 1px solid var(--sand-2);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.thread-header {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--sand-2);
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.thread-body {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 260px;
+}
+
+.msg { display: flex; flex-direction: column; gap: 3px; max-width: 85%; }
+.msg.outgoing { align-self: flex-end; align-items: flex-end; }
+.msg.incoming { align-self: flex-start; }
+
+.msg-bubble {
+  padding: 9px 13px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.msg.outgoing .msg-bubble { background: var(--blue); color: #fff; border-bottom-right-radius: 4px; }
+.msg.incoming .msg-bubble { background: var(--sand); color: var(--ink); border-bottom-left-radius: 4px; }
+.msg-time { font-size: 10px; color: var(--ink-3); font-family: var(--mono); }
+
+.thread-input {
+  padding: 12px 16px;
+  border-top: 1px solid var(--sand-2);
+  display: flex;
+  gap: 8px;
+}
+.thread-input input {
+  flex: 1;
+  border: 1px solid var(--sand-2);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: var(--sans);
+  outline: none;
+  background: var(--sand);
+  transition: border-color 0.15s;
+}
+.thread-input input:focus { border-color: var(--blue-md); background: var(--white); }
+
+.send-btn {
+  padding: 8px 16px;
+  background: var(--blue);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.send-btn:hover { background: #0d1f38; }
+
+.request-card {
+  background: var(--white);
+  border: 1px solid var(--sand-2);
+  border-radius: 14px;
+  padding: 20px;
+}
+.request-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 14px; }
+
+.form-row { margin-bottom: 12px; }
+.form-label { font-size: 11px; font-family: var(--mono); color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 5px; display: block; }
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  border: 1px solid var(--sand-2);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 13px;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--sand);
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--blue-md);
+  background: var(--white);
+}
+.form-textarea { resize: vertical; min-height: 80px; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.page { animation: fadeUp 0.2s ease both; }
+
+/* ── NOTIFICATION DOT ── */
+.notif-dot {
+  width: 7px; height: 7px;
+  background: var(--orange);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--ink-3);
+}
+.empty-state .big-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.3; }
+.empty-state p { font-size: 14px; font-weight: 500; margin-bottom: 6px; color: var(--ink-2); }
+.empty-state small { font-size: 12px; }
+
+/* Setup notice */
+.setup-notice {
+  background: var(--orange-lt);
+  border: 1px solid var(--orange-md);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--orange);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="sidebar-logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="9" cy="9" r="3" fill="white"/>
+            <path d="M9 2v2M9 14v2M2 9h2M14 9h2M4.22 4.22l1.42 1.42M12.36 12.36l1.42 1.42M4.22 13.78l1.42-1.42M12.36 5.64l1.42-1.42" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <div class="title">Physics TA Hub</div>
+          <div class="sub">UIUC · FA 2025</div>
+        </div>
+      </div>
+      <div class="role-switcher">
+        <button class="role-btn active" onclick="setRole('ta')">TA</button>
+        <button class="role-btn" onclick="setRole('coord')">Coord</button>
+        <button class="role-btn" onclick="setRole('admin')">Admin</button>
+        <button class="role-btn" onclick="setRole('researcher')">Research</button>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <button class="nav-item active" onclick="showPage('dashboard')">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/>
+          <rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/>
+        </svg>
+        Dashboard
+      </button>
+
+      <div class="nav-section-label">Modules</div>
+      <button class="nav-item" onclick="showPage('grading')">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M2 4h12M2 8h8M2 12h5"/><circle cx="13" cy="11" r="2.5"/><path d="M15 13.5l1.5 1.5"/>
+        </svg>
+        Grading
+        <span class="nav-badge">3</span>
+      </button>
+      <button class="nav-item" onclick="showPage('materials')">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M10 2v4h4"/>
+        </svg>
+        Materials
+      </button>
+      <button class="nav-item" onclick="showPage('teaching')">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M8 1l1.8 3.6L14 5.4l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1-3-2.9 4.2-.8L8 1z"/>
+        </svg>
+        Teaching Log
+      </button>
+      <button class="nav-item" onclick="showPage('comms')">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M14 10a1 1 0 01-1 1H4l-3 3V3a1 1 0 011-1h11a1 1 0 011 1v7z"/>
+        </svg>
+        Coordinator
+        <span class="notif-dot" style="margin-left:auto"></span>
+      </button>
+      <button class="nav-item" onclick="showPage('firstta')">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M8 1a3 3 0 100 6 3 3 0 000-6z"/><path d="M2 14s-1-1 0-3c1-2 3-3 6-3s5 1 6 3c1 2 0 3 0 3"/>
+        </svg>
+        First Time TA
+      </button>
+      <button class="nav-item" onclick="showPage('observation')" id="nav-observation" style="display:none;">
+        <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <circle cx="8" cy="8" r="3"/><path d="M1 8s2-5 7-5 7 5 7 5-2 5-7 5-7-5-7-5z"/>
+        </svg>
+        Observation
+      </button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="user-card">
+        <div class="avatar" id="user-avatar">YO</div>
+        <div class="user-info">
+          <div class="name" id="user-name">Your Name</div>
+          <div class="role" id="user-role">TA · Discussion 3</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div>
+        <span class="topbar-title" id="topbar-title">Dashboard</span>
+        <span class="topbar-sub" id="topbar-sub">· PHYS 211</span>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="#8A877E" stroke-width="1.5" stroke-linecap="round"><circle cx="7" cy="7" r="5"/><path d="M12 12l2.5 2.5"/></svg>
+          <input type="text" placeholder="Search…">
+        </div>
+        <button class="icon-btn" title="Notifications">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 1a5 5 0 015 5v3l1.5 2.5H1.5L3 9V6a5 5 0 015-5z"/><path d="M6.5 13.5a1.5 1.5 0 003 0"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ DASHBOARD PAGE ══ -->
+    <div class="page" id="page-dashboard">
+      <div class="welcome-banner">
+        <div class="welcome-text">
+          <h2>Good morning, welcome back.</h2>
+          <p>PHYS 211 · University Physics: Mechanics · Week 9 of 16</p>
+        </div>
+        <div class="welcome-meta">
+          <div class="date" id="today-date"></div>
+          <div class="course">PHYS 211 · Disc. 3</div>
+        </div>
+      </div>
+
+      <!-- ── Reminders ── -->
+      <div style="margin-bottom:24px;">
+        <div style="font-size:13px;font-weight:600;color:var(--ink-2);margin-bottom:12px;">Reminders</div>
+        <div style="display:flex;flex-direction:column;gap:8px;" id="reminders-list">
+
+          <!-- Urgent: grade deadline -->
+          <div onclick="showPage('grading')" style="display:flex;align-items:center;gap:14px;background:var(--white);border:1px solid var(--orange-md);border-left:4px solid var(--orange);border-radius:10px;padding:13px 16px;cursor:pointer;transition:box-shadow 0.15s;" onmouseover="this.style.boxShadow='0 2px 10px rgba(0,0,0,0.07)'" onmouseout="this.style.boxShadow='none'">
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--orange-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="7"/><path d="M8 5v3M8 11v.5"/></svg>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:600;color:var(--ink);">Quiz 4 grades due in 2 days</div>
+              <div style="font-size:11px;color:var(--ink-3);margin-top:2px;">24 submissions · 8 graded so far → Go to Grading</div>
+            </div>
+            <span style="font-size:10px;font-family:var(--mono);background:var(--orange-lt);color:var(--orange);padding:3px 8px;border-radius:20px;white-space:nowrap;font-weight:600;">2 days left</span>
+          </div>
+
+          <!-- Warning: reflection overdue -->
+          <div onclick="showPage('teaching')" style="display:flex;align-items:center;gap:14px;background:var(--white);border:1px solid var(--blue-md);border-left:4px solid var(--blue);border-radius:10px;padding:13px 16px;cursor:pointer;transition:box-shadow 0.15s;" onmouseover="this.style.boxShadow='0 2px 10px rgba(0,0,0,0.07)'" onmouseout="this.style.boxShadow='none'">
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--blue-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round"><path d="M8 1l1.8 3.6L14 5.4l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1-3-2.9 4.2-.8L8 1z"/></svg>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:600;color:var(--ink);">Week 9 teaching reflection not submitted</div>
+              <div style="font-size:11px;color:var(--ink-3);margin-top:2px;">Log your session ratings and open-ended reflection → Go to Teaching Log</div>
+            </div>
+            <span style="font-size:10px;font-family:var(--mono);background:var(--blue-lt);color:var(--blue);padding:3px 8px;border-radius:20px;white-space:nowrap;font-weight:600;">Due Friday</span>
+          </div>
+
+          <!-- Info: HW grading coming up -->
+          <div onclick="showPage('grading')" style="display:flex;align-items:center;gap:14px;background:var(--white);border:1px solid var(--sand-2);border-left:4px solid var(--sand-3);border-radius:10px;padding:13px 16px;cursor:pointer;transition:box-shadow 0.15s;" onmouseover="this.style.boxShadow='0 2px 10px rgba(0,0,0,0.07)'" onmouseout="this.style.boxShadow='none'">
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--sand-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="var(--ink-3)" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="12" height="12" rx="2"/><path d="M5 8h6M8 5v6"/></svg>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:600;color:var(--ink);">HW 7 submissions open May 2</div>
+              <div style="font-size:11px;color:var(--ink-3);margin-top:2px;">22 students enrolled in Discussion 3 · Grading window opens in 4 days</div>
+            </div>
+            <span style="font-size:10px;font-family:var(--mono);background:var(--sand-2);color:var(--ink-3);padding:3px 8px;border-radius:20px;white-space:nowrap;">4 days</span>
+          </div>
+
+          <!-- Green: supply request delivered -->
+          <div style="display:flex;align-items:center;gap:14px;background:var(--white);border:1px solid var(--green-lt);border-left:4px solid var(--green);border-radius:10px;padding:13px 16px;transition:box-shadow 0.15s;" onmouseover="this.style.boxShadow='0 2px 10px rgba(0,0,0,0.07)'" onmouseout="this.style.boxShadow='none'">
+            <div style="width:32px;height:32px;border-radius:8px;background:var(--green-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round"><path d="M2 8l4 4 8-8"/></svg>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:600;color:var(--ink);">Quiz 4 printouts delivered by Tim Stelzer</div>
+              <div style="font-size:11px;color:var(--ink-3);margin-top:2px;">30 copies in TA mailbox · Ready to pick up</div>
+            </div>
+            <span style="font-size:10px;font-family:var(--mono);background:var(--green-lt);color:var(--green);padding:3px 8px;border-radius:20px;white-space:nowrap;font-weight:600;">Done ✓</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="modules-grid">
+        <div class="module-card grading" onclick="showPage('grading')">
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div class="module-icon orange">
+              <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 4h12M2 8h8M2 12h5"/><circle cx="13" cy="11" r="2.5"/></svg>
+            </div>
+            <div class="module-info">
+              <h3>Grading</h3>
+              <p>Sync with Gradescope, manage rubrics, submit bulk feedback to students.</p>
+            </div>
+            <svg class="module-arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </div>
+          <div class="module-footer">
+            <span class="module-status status-setup">Connecting Gradescope</span>
+            <span style="font-size:11px;color:var(--ink-3);font-family:var(--mono)">3 pending</span>
+          </div>
+        </div>
+
+        <div class="module-card materials" onclick="showPage('materials')">
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div class="module-icon blue">
+              <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 2h7l3 3v9a1 1 0 01-1 1H3a1 1 0 01-1-1V3a1 1 0 011-1z"/><path d="M10 2v4h4"/></svg>
+            </div>
+            <div class="module-info">
+              <h3>Materials</h3>
+              <p>Access quizzes, question packets, labs and slides — organized by week and type.</p>
+            </div>
+            <svg class="module-arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </div>
+          <div class="module-footer">
+            <span class="module-status status-setup">Connect Illinois Box</span>
+            <span style="font-size:11px;color:var(--ink-3);font-family:var(--mono)">18 files</span>
+          </div>
+        </div>
+
+        <div class="module-card teaching" onclick="showPage('teaching')">
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div class="module-icon purple">
+              <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 1l1.8 3.6L14 5.4l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1-3-2.9 4.2-.8L8 1z"/></svg>
+            </div>
+            <div class="module-info">
+              <h3>Teaching summary</h3>
+              <p>Log each session, track what worked, build a reflective teaching record.</p>
+            </div>
+            <svg class="module-arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </div>
+          <div class="module-footer">
+            <span class="module-status status-ready">Ready</span>
+            <span style="font-size:11px;color:var(--ink-3);font-family:var(--mono)">7 entries</span>
+          </div>
+        </div>
+
+        <div class="module-card comms" onclick="showPage('comms')">
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div class="module-icon teal">
+              <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M14 10a1 1 0 01-1 1H4l-3 3V3a1 1 0 011-1h11a1 1 0 011 1v7z"/></svg>
+            </div>
+            <div class="module-info">
+              <h3>Coordinator comms</h3>
+              <p>Message the discussion coordinator, request supplies, flag issues fast.</p>
+            </div>
+            <svg class="module-arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </div>
+          <div class="module-footer">
+            <span class="module-status status-ready">Ready</span>
+            <span style="font-size:11px;color:var(--ink-3);font-family:var(--mono)">1 unread</span>
+          </div>
+        </div>
+
+        <div class="module-card" style="border-color:var(--sand-2);grid-column:1/-1;" onclick="showPage('firstta')">
+          <div style="display:flex;align-items:flex-start;gap:14px">
+            <div class="module-icon orange">
+              <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M8 1a3 3 0 100 6 3 3 0 000-6z"/><path d="M2 14s-1-1 0-3c1-2 3-3 6-3s5 1 6 3c1 2 0 3 0 3"/></svg>
+            </div>
+            <div class="module-info">
+              <h3>First Time TA</h3>
+              <p>Physics 211 Teaching Assistant Professional Development · 10 training modules on collaborative learning, feedback, group facilitation, and more.</p>
+            </div>
+            <svg class="module-arrow" width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+          </div>
+          <div class="module-footer">
+            <span class="module-status status-ready">Ready</span>
+            <span style="font-size:11px;color:var(--ink-3);font-family:var(--mono)">10 modules</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ FIRST TIME TA PAGE ══ -->
+    <div class="page hidden" id="page-firstta">
+      <div class="page-header">
+        <div>
+          <h1>First Time TA</h1>
+          <p>Physics 211 Teaching Assistant Professional Development</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:var(--green-lt);border:1px solid #A7D9BB;border-radius:8px;padding:6px 14px;">
+          <div style="width:7px;height:7px;background:var(--green);border-radius:50%;"></div>
+          <span style="font-size:11px;font-family:var(--mono);color:var(--green);font-weight:500;">10 modules · PHYS 211</span>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:12px;padding:18px 22px;margin-bottom:24px;display:flex;align-items:center;gap:20px;">
+        <div style="flex:1;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span style="font-size:12px;font-weight:600;color:var(--ink);">Your progress</span>
+            <span style="font-size:11px;font-family:var(--mono);color:var(--ink-3);" id="ta-progress-label">0 of 10 completed</span>
+          </div>
+          <div style="height:6px;background:var(--sand-2);border-radius:3px;overflow:hidden;">
+            <div id="ta-progress-bar" style="height:100%;background:var(--orange);border-radius:3px;width:0%;transition:width 0.4s;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 Module cards -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;" id="ta-modules-grid"></div>
+    </div>
+
+    <!-- ══ MATERIALS PAGE ══ -->
+    <div class="page hidden" id="page-materials">
+      <div class="page-header">
+        <div>
+          <h1>Materials</h1>
+          <p>PHYS 211 · University Physics: Mechanics · Illinois Box</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="display:flex;align-items:center;gap:6px;background:#E8F5EE;border:1px solid #A7D9BB;border-radius:8px;padding:6px 12px;">
+            <div style="width:7px;height:7px;background:#1A6B3C;border-radius:50%;"></div>
+            <span style="font-size:11px;font-family:var(--mono);color:#1A6B3C;font-weight:500;">Connected · Illinois Box</span>
+          </div>
+          <a href="https://app.box.com/folder/379167387610" target="_blank" style="padding:7px 14px;border:1px solid var(--sand-2);border-radius:8px;background:#fff;font-size:12px;font-family:var(--sans);color:var(--ink-2);cursor:pointer;text-decoration:none;">Open in Box ↗</a>
+        </div>
+      </div>
+
+      <!-- Week folder grid -->
+      <div id="week-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:24px;"></div>
+
+      <!-- Files inside a week (shown when a week is clicked) -->
+      <div id="week-detail" style="display:none;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+          <button onclick="backToWeeks()" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--sand-2);border-radius:8px;background:#fff;font-size:12px;font-family:var(--sans);color:var(--ink-2);cursor:pointer;">
+            ← Back
+          </button>
+          <span id="week-detail-title" style="font-size:15px;font-weight:600;"></span>
+          <span id="week-detail-count" style="font-size:11px;font-family:var(--mono);color:var(--ink-3);background:var(--sand-2);padding:2px 8px;border-radius:20px;"></span>
+        </div>
+        <div id="week-files-container"></div>
+      </div>
+    </div>
+
+    <!-- ══ GRADING PAGE ══ -->
+    <div class="page hidden" id="page-grading">
+      <div class="page-header">
+        <div>
+          <h1>Grading</h1>
+          <p>Assignments synced from Gradescope · PHYS 211</p>
+        </div>
+        <button class="submit-btn" style="font-size:12px;padding:8px 18px">Sync Gradescope</button>
+      </div>
+
+      <div class="setup-notice">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="7"/><path d="M8 5v3M8 11v.5"/></svg>
+        Gradescope integration coming next. Data below is a preview.
+      </div>
+
+      <div class="grading-table">
+        <div class="table-header">
+          <div>Assignment</div>
+          <div>Due date</div>
+          <div>Submissions</div>
+          <div>Graded</div>
+          <div>Status</div>
+          <div></div>
+        </div>
+        <div class="table-row">
+          <div><div style="font-weight:500">HW 7 · Newton's Laws</div><div style="font-size:11px;color:var(--ink-3);margin-top:2px">Discussion 3</div></div>
+          <div style="font-size:12px;color:var(--ink-3)">Apr 28</div>
+          <div style="font-size:13px">24</div>
+          <div>
+            <div style="font-size:13px;font-weight:500">8 / 24</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:33%"></div></div>
+          </div>
+          <div><span class="grade-badge grade-grading">Grading</span></div>
+          <div><button class="dl-btn" style="font-size:11px;padding:5px 10px;width:auto">Open</button></div>
+        </div>
+        <div class="table-row">
+          <div><div style="font-weight:500">Quiz 4 · Energy</div><div style="font-size:11px;color:var(--ink-3);margin-top:2px">Discussion 3</div></div>
+          <div style="font-size:12px;color:var(--ink-3)">Apr 25</div>
+          <div style="font-size:13px">24</div>
+          <div>
+            <div style="font-size:13px;font-weight:500">24 / 24</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:100%;background:var(--green)"></div></div>
+          </div>
+          <div><span class="grade-badge grade-done">Done</span></div>
+          <div><button class="dl-btn" style="font-size:11px;padding:5px 10px;width:auto">View</button></div>
+        </div>
+        <div class="table-row">
+          <div><div style="font-weight:500">Lab 5 · Momentum</div><div style="font-size:11px;color:var(--ink-3);margin-top:2px">Discussion 3</div></div>
+          <div style="font-size:12px;color:var(--ink-3)">May 2</div>
+          <div style="font-size:13px">22</div>
+          <div>
+            <div style="font-size:13px;font-weight:500">0 / 22</div>
+            <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+          </div>
+          <div><span class="grade-badge grade-pending">Pending</span></div>
+          <div><button class="dl-btn" style="font-size:11px;padding:5px 10px;width:auto">Start</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ TEACHING PAGE ══ -->
+    <div class="page hidden" id="page-teaching">
+      <div class="page-header">
+        <div>
+          <h1>Teaching summary</h1>
+          <p>Weekly reflection log · PHYS 211</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <select id="log-week-select" class="chip-select" style="font-weight:500;">
+            <option>Week 1</option><option>Week 2</option><option>Week 3</option>
+            <option>Week 4</option><option>Week 5</option><option>Week 6</option>
+            <option>Week 7</option><option>Week 8</option><option selected>Week 9</option>
+            <option>Week 10</option><option>Week 11</option><option>Week 12</option>
+            <option>Week 13</option><option>Week 14</option><option>Week 15</option><option>Week 16</option>
+          </select>
+          <button class="submit-btn" style="font-size:12px;padding:8px 18px;" onclick="saveLog()">Save log</button>
+        </div>
+      </div>
+
+      <div class="teaching-layout">
+        <!-- LEFT: Log form -->
+        <div>
+
+          <!-- ── Likert section ── -->
+          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:14px;padding:24px;margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+              <div style="width:28px;height:28px;border-radius:7px;background:var(--orange-lt);display:flex;align-items:center;justify-content:center;">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-linecap="round"><path d="M8 1l1.8 3.6L14 5.4l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1-3-2.9 4.2-.8L8 1z"/></svg>
+              </div>
+              <div>
+                <div style="font-size:13px;font-weight:600;">Session ratings</div>
+                <div style="font-size:11px;color:var(--ink-3);font-family:var(--mono);">Rate each dimension · 1 = Poor, 5 = Excellent</div>
+              </div>
+              <span style="margin-left:auto;font-size:11px;font-family:var(--mono);color:var(--ink-3);" id="log-date"></span>
+            </div>
+
+            <!-- Scale header -->
+            <div style="display:grid;grid-template-columns:180px repeat(5,1fr);gap:0;margin-bottom:10px;padding:0 4px;">
+              <div></div>
+              <div style="text-align:center;font-size:10px;font-family:var(--mono);color:var(--ink-3);">1<br><span style="font-size:9px;">Poor</span></div>
+              <div style="text-align:center;font-size:10px;font-family:var(--mono);color:var(--ink-3);">2</div>
+              <div style="text-align:center;font-size:10px;font-family:var(--mono);color:var(--ink-3);">3<br><span style="font-size:9px;">OK</span></div>
+              <div style="text-align:center;font-size:10px;font-family:var(--mono);color:var(--ink-3);">4</div>
+              <div style="text-align:center;font-size:10px;font-family:var(--mono);color:var(--ink-3);">5<br><span style="font-size:9px;">Excellent</span></div>
+            </div>
+
+            <!-- Likert rows -->
+            <div id="likert-rows" style="display:flex;flex-direction:column;gap:4px;"></div>
+
+            <!-- Legend -->
+            <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--sand-2);display:flex;align-items:center;gap:6px;">
+              <div style="width:12px;height:12px;border-radius:3px;background:var(--orange);"></div>
+              <span style="font-size:11px;color:var(--ink-3);">Selected rating</span>
+              <div style="width:12px;height:12px;border-radius:3px;background:var(--sand-2);margin-left:12px;"></div>
+              <span style="font-size:11px;color:var(--ink-3);">Not selected</span>
+            </div>
+          </div>
+
+          <!-- ── Table snapshot ── -->
+          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:14px;padding:22px;margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+              <div style="width:28px;height:28px;border-radius:7px;background:var(--blue-lt);display:flex;align-items:center;justify-content:center;">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round"><rect x="1" y="3" width="6" height="5" rx="1"/><rect x="9" y="3" width="6" height="5" rx="1"/><rect x="1" y="10" width="6" height="5" rx="1"/><rect x="9" y="10" width="6" height="5" rx="1"/></svg>
+              </div>
+              <div>
+                <div style="font-size:13px;font-weight:600;">Table snapshot</div>
+                <div style="font-size:11px;color:var(--ink-3);font-family:var(--mono);">Quick rating + note per table · no individual tracking</div>
+              </div>
+              <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+                <label style="font-size:11px;color:var(--ink-3);">Tables:</label>
+                <select id="table-count-select" class="chip-select" style="padding:4px 8px;font-size:11px;" onchange="renderTableSnapshot()">
+                  <option value="3">3</option><option value="4">4</option>
+                  <option value="5">5</option><option value="6" selected>6</option>
+                  <option value="7">7</option><option value="8">8</option>
+                </select>
+              </div>
+            </div>
+            <div id="table-snapshot-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;"></div>
+          </div>
+
+          <!-- ── AristAI Pedagogy Recommendations ── -->
+          <div style="background:var(--blue);border-radius:14px;padding:22px;margin-bottom:16px;position:relative;overflow:hidden;">
+            <div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:var(--orange);border-radius:50%;opacity:0.12;"></div>
+            <div style="display:flex;align-items:flex-start;gap:14px;">
+              <div style="width:40px;height:40px;border-radius:10px;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="20" height="20" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round">
+                  <circle cx="8" cy="8" r="3"/><path d="M8 2v1M8 13v1M2 8h1M13 8h1M3.93 3.93l.7.7M11.37 11.37l.7.7M3.93 12.07l.7-.7M11.37 4.63l.7-.7"/>
+                </svg>
+              </div>
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:4px;">Get pedagogy recommendations</div>
+                <div style="font-size:12px;color:rgba(255,255,255,0.6);line-height:1.6;margin-bottom:14px;">
+                  Based on your session ratings, AristAI can suggest evidence-based teaching strategies tailored to your PHYS 211 discussion.
+                </div>
+                <a href="https://courses.physics.illinois.edu/phys211/sp2026/private/aristai-ta.html" target="_blank"
+                  style="display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:var(--orange);color:#fff;border-radius:8px;font-size:13px;font-weight:600;font-family:var(--sans);text-decoration:none;transition:background 0.15s;"
+                  onmouseover="this.style.background='#c73e00'" onmouseout="this.style.background='var(--orange)'">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round">
+                    <circle cx="8" cy="8" r="3"/><path d="M8 2v1M8 13v1M2 8h1M13 8h1M3.93 3.93l.7.7M11.37 11.37l.7.7M3.93 12.07l.7-.7M11.37 4.63l.7-.7"/>
+                  </svg>
+                  Open AristAI TA recommendations ↗
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT: Insights sidebar -->
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:var(--ink-2);">Semester insights</div>
+          <div class="insight-card">
+            <div class="label">Sessions logged</div>
+            <div class="value">7</div>
+            <div class="sub">of 16 total · Week 9</div>
+          </div>
+          <div class="insight-card">
+            <div class="label">Avg overall rating</div>
+            <div class="value">3.8 <span style="font-size:14px;color:var(--ink-3);">/ 5</span></div>
+            <div class="sub">Across 7 sessions</div>
+          </div>
+          <div class="insight-card">
+            <div class="label">Highest dimension</div>
+            <div class="value" style="font-size:16px;color:var(--green);">Confidence</div>
+            <div class="sub">Avg 4.4 / 5</div>
+          </div>
+          <div class="insight-card">
+            <div class="label">Needs attention</div>
+            <div class="value" style="font-size:16px;color:var(--orange);">Participation</div>
+            <div class="sub">Avg 2.9 / 5</div>
+          </div>
+
+          <!-- Challenges prompt -->
+          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:var(--radius);padding:16px;margin-top:12px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <div style="width:22px;height:22px;border-radius:6px;background:var(--orange-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"><path d="M8 2v8M8 13v.5"/></svg>
+              </div>
+              <div style="font-size:12px;font-weight:600;color:var(--ink);">What was challenging this session?</div>
+            </div>
+            <p style="font-size:11px;color:var(--ink-3);line-height:1.6;margin-bottom:10px;">
+              Where did <strong>engagement, participation, or preparedness</strong> fall short? Describe a specific moment and what you think caused it.
+            </p>
+            <textarea placeholder="Describe the specific challenge, when it happened, and how students responded…" style="width:100%;min-height:100px;border:1px solid var(--sand-2);border-radius:8px;padding:10px;font-size:12px;font-family:var(--sans);color:var(--ink);background:var(--sand);outline:none;resize:vertical;line-height:1.6;" onfocus="this.style.borderColor='var(--orange-md)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--sand-2)';this.style.background='var(--sand)'"></textarea>
+            <a href="https://courses.physics.illinois.edu/phys211/sp2026/private/aristai-ta.html" target="_blank"
+              style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:11px;font-weight:600;color:var(--orange);text-decoration:none;font-family:var(--mono);"
+              onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 2v1M8 13v1M2 8h1M13 8h1"/></svg>
+              Get AristAI recommendations for this challenge ↗
+            </a>
+          </div>
+
+          <!-- Highlights prompt -->
+          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:var(--radius);padding:16px;margin-top:10px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+              <div style="width:22px;height:22px;border-radius:6px;background:var(--green-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M8 1l1.5 3 3.5.5-2.5 2.5.5 3.5L8 9l-3 1.5.5-3.5L3 4.5l3.5-.5L8 1z"/></svg>
+              </div>
+              <div style="font-size:12px;font-weight:600;color:var(--ink);">What went well this session?</div>
+            </div>
+            <p style="font-size:11px;color:var(--ink-3);line-height:1.6;margin-bottom:10px;">
+              What drove your higher ratings in <strong>engagement, confidence, or overall quality</strong>? Describe the moment and what you'd repeat next week.
+            </p>
+            <textarea placeholder="Describe the highlight, what made it work, and what you'd do again…" style="width:100%;min-height:100px;border:1px solid var(--sand-2);border-radius:8px;padding:10px;font-size:12px;font-family:var(--sans);color:var(--ink);background:var(--sand);outline:none;resize:vertical;line-height:1.6;" onfocus="this.style.borderColor='var(--green-lt)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--sand-2)';this.style.background='var(--sand)'"></textarea>
+            <a href="https://courses.physics.illinois.edu/phys211/sp2026/private/aristai-ta.html" target="_blank"
+              style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:11px;font-weight:600;color:var(--green);text-decoration:none;font-family:var(--mono);"
+              onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 2v1M8 13v1M2 8h1M13 8h1"/></svg>
+              Get AristAI recommendations to build on this ↗
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ COMMS PAGE ══ -->
+    <div class="page hidden" id="page-comms">
+      <div class="page-header">
+        <div>
+          <h1>Coordinator comms</h1>
+          <p>Message your discussion coordinator, request supplies</p>
+        </div>
+      </div>
+      <div class="comms-layout">
+        <div class="message-thread">
+          <div class="thread-header">
+            <div style="width:28px;height:28px;border-radius:50%;background:var(--teal-lt);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--teal)">TS</div>
+            <div>
+              <div style="font-size:13px;font-weight:600">Tim Stelzer</div>
+              <div style="font-size:10px;color:var(--ink-3);font-family:var(--mono)">Discussion Coordinator</div>
+            </div>
+            <div class="notif-dot" style="margin-left:auto"></div>
+          </div>
+          <div class="thread-body">
+            <div class="msg incoming">
+              <div class="msg-bubble">Hi! Just a reminder that extra whiteboard markers are in the supply closet (LLP 158). Let me know if you need anything else.</div>
+              <div class="msg-time">Mon 9:14 AM</div>
+            </div>
+            <div class="msg outgoing">
+              <div class="msg-bubble">Thanks! Also — we're running low on printed quiz sheets for Disc 3. Could we get another 30 copies of Quiz 4?</div>
+              <div class="msg-time">Mon 11:32 AM</div>
+            </div>
+            <div class="msg incoming">
+              <div class="msg-bubble">On it! I'll have them ready by Wednesday morning in the TA mailbox.</div>
+              <div class="msg-time">Mon 12:05 PM</div>
+            </div>
+          </div>
+          <div class="thread-input">
+            <input type="text" placeholder="Message coordinator…" id="msg-input">
+            <button class="send-btn" onclick="sendMsg()">Send</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="request-card">
+            <h3>Supply request</h3>
+            <div class="form-row">
+              <label class="form-label">Item needed</label>
+              <input type="text" class="form-input" placeholder="e.g. Whiteboard markers, printed quiz sheets">
+            </div>
+            <div class="form-row">
+              <label class="form-label">Quantity</label>
+              <input type="text" class="form-input" placeholder="e.g. 30 copies, 2 packs">
+            </div>
+            <div class="form-row">
+              <label class="form-label">Needed by</label>
+              <input type="date" class="form-input">
+            </div>
+            <div class="form-row">
+              <label class="form-label">Notes (optional)</label>
+              <textarea class="form-textarea" placeholder="Any additional context…"></textarea>
+            </div>
+            <button class="submit-btn" style="width:100%;padding:10px">Submit request</button>
+          </div>
+
+          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:14px;padding:16px;margin-top:14px">
+            <div style="font-size:12px;font-weight:600;margin-bottom:10px">Recent requests</div>
+            <div style="font-size:12px;color:var(--ink-2);display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--sand-2)">
+              <span>30x Quiz 4 printouts</span>
+              <span style="font-size:10px;font-family:var(--mono);background:var(--green-lt);color:var(--green);padding:2px 7px;border-radius:20px">In progress</span>
+            </div>
+            <div style="font-size:12px;color:var(--ink-2);display:flex;align-items:center;justify-content:space-between;padding:8px 0">
+              <span>Whiteboard markers ×2</span>
+              <span style="font-size:10px;font-family:var(--mono);background:var(--sand-2);color:var(--ink-3);padding:2px 7px;border-radius:20px">Delivered</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ OBSERVATION PAGE ══ -->
+    <div class="page hidden" id="page-observation">
+      <div class="page-header">
+        <div>
+          <h1>Research tools</h1>
+          <p>Physics 211 · Classroom observation & data collection</p>
+        </div>
+      </div>
+
+      <!-- Tool selector -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px;" id="research-tool-grid"></div>
+
+      <!-- ── Tool panels (one shown at a time) ── -->
+
+      <!-- TOOL 1: Talking & Listening (existing) -->
+      <div id="rtool-1" style="display:none;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+          <button onclick="showResearchTool(null)" style="padding:6px 12px;border:1px solid var(--sand-2);border-radius:7px;background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);">← Back</button>
+          <div style="font-size:14px;font-weight:600;">Talking & Listening Tracker</div>
+        </div>
+        <div id="obs-setup">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:600px;margin-bottom:20px;">
+            <div><label class="form-label">Course</label>
+              <select class="form-select" id="obs-course"><option>PHYS 211 · Disc. 1</option><option selected>PHYS 211 · Disc. 3</option><option>PHYS 211 · Disc. 5</option><option>PHYS 211 · Disc. 7</option><option>PHYS 212 · Disc. 2</option></select></div>
+            <div><label class="form-label">Date & time</label><input type="datetime-local" class="form-input" id="obs-datetime"></div>
+            <div><label class="form-label">Observer name</label><input type="text" class="form-input" id="obs-name" placeholder="Your name"></div>
+            <div><label class="form-label">Number of tables</label>
+              <select class="form-select" id="obs-table-count"><option>4</option><option>5</option><option selected>6</option><option>7</option><option>8</option></select></div>
+          </div>
+          <button class="submit-btn" onclick="startObservation()" style="padding:11px 28px;font-size:14px;">Start observation →</button>
+        </div>
+        <div id="obs-tool" style="display:none;">
+          <div style="display:flex;align-items:center;gap:16px;background:var(--white);border:1px solid var(--sand-2);border-radius:12px;padding:14px 20px;margin-bottom:20px;">
+            <div><div style="font-size:12px;font-weight:600;" id="obs-course-label"></div><div style="font-size:11px;color:var(--ink-3);font-family:var(--mono);" id="obs-datetime-label"></div></div>
+            <div style="margin-left:auto;display:flex;align-items:center;gap:16px;">
+              <div style="text-align:center;"><div style="font-size:32px;font-weight:700;font-family:var(--mono);color:var(--blue);letter-spacing:0.05em;line-height:1;" id="obs-timer">01:00</div><div style="font-size:10px;color:var(--ink-3);font-family:var(--mono);margin-top:2px;" id="obs-interval-label">Interval 1</div></div>
+              <div style="display:flex;flex-direction:column;gap:6px;"><button onclick="toggleTimer()" id="obs-timer-btn" class="submit-btn" style="padding:7px 16px;font-size:12px;">Start</button><button onclick="resetObservation()" style="padding:7px 16px;border:1px solid var(--sand-2);border-radius:var(--radius-sm);background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);">Reset</button></div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:260px 1fr;gap:20px;align-items:start;">
+            <div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><div style="font-size:11px;font-family:var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:0.05em;">Classroom map</div><button onclick="addTable()" style="padding:4px 10px;border:1px dashed var(--sand-3);border-radius:6px;background:transparent;font-size:11px;font-family:var(--sans);color:var(--ink-3);cursor:pointer;">+ Table</button></div>
+              <div style="background:var(--sand);border:1px solid var(--sand-3);border-radius:12px;padding:10px;">
+                <div style="text-align:center;font-size:9px;font-family:var(--mono);color:var(--ink-3);margin-bottom:6px;letter-spacing:0.06em;">▲ FRONT / BOARD</div>
+                <div id="classroom-canvas" style="position:relative;width:236px;height:360px;background:var(--white);border:1px solid var(--sand-2);border-radius:8px;overflow:hidden;" ondragover="event.preventDefault()" ondrop="dropTable(event)"></div>
+                <div style="display:flex;justify-content:space-between;margin-top:5px;padding:0 2px;"><div style="font-size:9px;font-family:var(--mono);color:var(--ink-3);">◀ AISLE</div><div style="font-size:9px;font-family:var(--mono);color:var(--ink-3);">AISLE ▶</div></div>
+                <div style="font-size:9px;color:var(--ink-3);margin-top:5px;text-align:center;">Drag to reposition</div>
+              </div>
+            </div>
+            <div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;"><div style="font-size:13px;font-weight:600;" id="obs-selected-table-label">Select a table</div><div style="display:flex;gap:8px;"><button onclick="addStudent()" style="padding:6px 12px;background:var(--blue);color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:600;font-family:var(--sans);cursor:pointer;">+ Student</button><button onclick="removeStudent()" style="padding:6px 12px;background:#E53E3E;color:#fff;border:none;border-radius:7px;font-size:11px;font-weight:600;font-family:var(--sans);cursor:pointer;">− Student</button></div></div>
+              <div id="obs-student-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;min-height:120px;"><div style="grid-column:1/-1;display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:13px;">Click a table on the map</div></div>
+              <div style="margin-top:16px;"><label style="font-size:11px;font-family:var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:0.05em;display:block;margin-bottom:6px;">Notes about observation</label><textarea id="obs-notes" class="form-textarea" style="min-height:70px;" placeholder="Notes about this interval…"></textarea></div>
+              <div style="margin-top:12px;display:flex;gap:10px;"><button onclick="submitInterval()" class="submit-btn" style="padding:9px 22px;">Submit interval</button><button onclick="exportData()" style="padding:9px 18px;border:1px solid var(--sand-2);border-radius:var(--radius-sm);background:var(--white);font-size:13px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);">Export CSV</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL 2: Whiteboard Usage -->
+      <div id="rtool-2" style="display:none;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;"><button onclick="showResearchTool(null)" style="padding:6px 12px;border:1px solid var(--sand-2);border-radius:7px;background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);">← Back</button><div style="font-size:14px;font-weight:600;">Whiteboard / Board Usage</div></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;" id="wb-table-grid"></div>
+        <div style="margin-top:16px;display:flex;gap:10px;align-items:center;">
+          <select class="chip-select" id="wb-table-count" onchange="renderWBTool()"><option>4</option><option>5</option><option selected>6</option><option>7</option><option>8</option></select>
+          <button onclick="logWBSweep()" class="submit-btn" style="padding:8px 20px;font-size:12px;">Log sweep</button>
+          <span style="font-size:11px;font-family:var(--mono);color:var(--ink-3);" id="wb-sweep-count">0 sweeps logged</span>
+          <button onclick="exportWBData()" style="padding:8px 14px;border:1px solid var(--sand-2);border-radius:var(--radius-sm);background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);margin-left:auto;">Export CSV</button>
+        </div>
+      </div>
+
+      <!-- TOOL 3: TA Position Map -->
+      <div id="rtool-3" style="display:none;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;"><button onclick="showResearchTool(null)" style="padding:6px 12px;border:1px solid var(--sand-2);border-radius:7px;background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);">← Back</button><div style="font-size:14px;font-weight:600;">TA Position Map</div></div>
+        <div style="display:grid;grid-template-columns:300px 1fr;gap:20px;">
+          <div>
+            <!-- Table setup -->
+            <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:12px;padding:14px;margin-bottom:12px;">
+              <div style="font-size:11px;font-family:var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;">Room setup</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+                <label style="font-size:12px;color:var(--ink-2);">Tables:</label>
+                <select class="chip-select" id="ta-pos-table-count" style="padding:4px 8px;font-size:11px;" onchange="renderTAPosMap()">
+                  <option>4</option><option>5</option><option selected>6</option><option>7</option><option>8</option>
+                </select>
+                <button onclick="renderTAPosMap()" style="padding:5px 10px;background:var(--blue);color:#fff;border:none;border-radius:6px;font-size:11px;font-family:var(--sans);cursor:pointer;">Reset layout</button>
+              </div>
+              <div style="font-size:10px;color:var(--ink-3);line-height:1.5;">Drag tables to match your real classroom. Then click anywhere on the map to log the TA's position.</div>
+            </div>
+
+            <!-- Map -->
+            <div style="background:var(--sand);border:1px solid var(--sand-3);border-radius:12px;padding:10px;">
+              <div style="text-align:center;font-size:9px;font-family:var(--mono);color:var(--ink-3);margin-bottom:6px;letter-spacing:0.06em;">▲ FRONT / BOARD</div>
+              <div id="ta-pos-canvas"
+                style="position:relative;width:276px;height:380px;background:var(--white);border:1px solid var(--sand-2);border-radius:8px;cursor:crosshair;"
+                onclick="logTAPosition(event)"
+                ondragover="event.preventDefault()"
+                ondrop="dropTAPosTable(event)">
+              </div>
+              <div style="display:flex;justify-content:space-between;margin-top:5px;"><div style="font-size:9px;font-family:var(--mono);color:var(--ink-3);">◀ AISLE</div><div style="font-size:9px;font-family:var(--mono);color:var(--ink-3);">AISLE ▶</div></div>
+            </div>
+
+            <!-- Quick log buttons -->
+            <button onclick="logTAPosition(null,'front')" style="margin-top:8px;width:100%;padding:7px;background:var(--blue-lt);border:1px solid var(--blue-md);border-radius:8px;font-size:12px;font-family:var(--sans);color:var(--blue);cursor:pointer;font-weight:500;">Log: At front/board</button>
+            <button onclick="logTAPosition(null,'roaming')" style="margin-top:6px;width:100%;padding:7px;background:var(--green-lt);border:1px solid #A7D9BB;border-radius:8px;font-size:12px;font-family:var(--sans);color:var(--green);cursor:pointer;font-weight:500;">Log: Roaming</button>
+          </div>
+
+          <!-- Log panel -->
+          <div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:12px;">Position log</div>
+            <div id="ta-pos-log" style="background:var(--white);border:1px solid var(--sand-2);border-radius:12px;overflow:hidden;max-height:420px;overflow-y:auto;"></div>
+            <div style="margin-top:12px;display:flex;gap:10px;align-items:center;">
+              <span style="font-size:11px;font-family:var(--mono);color:var(--ink-3);" id="ta-pos-count">0 positions logged</span>
+              <button onclick="exportTAPosData()" style="margin-left:auto;padding:8px 14px;border:1px solid var(--sand-2);border-radius:var(--radius-sm);background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);">Export CSV</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL 4: Question Type Logger -->
+      <div id="rtool-4" style="display:none;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;"><button onclick="showResearchTool(null)" style="padding:6px 12px;border:1px solid var(--sand-2);border-radius:7px;background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);">← Back</button><div style="font-size:14px;font-weight:600;">Question Type Logger</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:700px;">
+          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:14px;padding:22px;">
+            <div style="font-size:10px;font-weight:600;color:var(--ink-3);font-family:var(--mono);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Log a question</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+              <button onclick="logQuestion('Conceptual')" style="padding:14px 8px;border:1px solid var(--orange);border-radius:10px;background:var(--orange-lt);color:var(--orange);font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Conceptual</button>
+              <button onclick="logQuestion('Procedural')" style="padding:14px 8px;border:1px solid var(--blue);border-radius:10px;background:var(--blue-lt);color:var(--blue);font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Procedural</button>
+              <button onclick="logQuestion('Leading')" style="padding:14px 8px;border:1px solid var(--green);border-radius:10px;background:var(--green-lt);color:var(--green);font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Leading</button>
+              <button onclick="logQuestion('Open-ended')" style="padding:14px 8px;border:1px solid var(--purple);border-radius:10px;background:var(--purple-lt);color:var(--purple);font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Open-ended</button>
+            </div>
+            <div style="font-size:11px;font-family:var(--mono);color:var(--ink-3);margin-bottom:6px;">Asked by</div>
+            <div style="display:flex;gap:6px;margin-bottom:14px;">
+              <button id="qasker-ta" onclick="setQAsker('TA')" style="flex:1;padding:7px;border:2px solid var(--orange);border-radius:7px;background:var(--orange);color:#fff;font-size:12px;font-weight:600;font-family:var(--sans);cursor:pointer;">TA</button>
+              <button id="qasker-student" onclick="setQAsker('Student')" style="flex:1;padding:7px;border:2px solid var(--sand-2);border-radius:7px;background:var(--white);color:var(--ink-2);font-size:12px;font-weight:600;font-family:var(--sans);cursor:pointer;">Student</button>
+            </div>
+            <textarea id="q-note" placeholder="Optional note…" class="form-textarea" style="min-height:50px;"></textarea>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Summary</div>
+            <div id="q-summary" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;"></div>
+            <div id="q-log" style="background:var(--white);border:1px solid var(--sand-2);border-radius:12px;max-height:220px;overflow-y:auto;"></div>
+            <button onclick="exportQData()" style="margin-top:10px;padding:8px 14px;border:1px solid var(--sand-2);border-radius:var(--radius-sm);background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);">Export CSV</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL 5: Group Dynamics -->
+      <div id="rtool-5" style="display:none;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;"><button onclick="showResearchTool(null)" style="padding:6px 12px;border:1px solid var(--sand-2);border-radius:7px;background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);">← Back</button><div style="font-size:14px;font-weight:600;">Group Dynamics Coder</div></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;" id="gd-table-grid"></div>
+        <div style="margin-top:16px;display:flex;gap:10px;align-items:center;">
+          <select class="chip-select" id="gd-table-count" onchange="renderGDTool()"><option>4</option><option>5</option><option selected>6</option><option>7</option><option>8</option></select>
+          <button onclick="logGDSweep()" class="submit-btn" style="padding:8px 20px;font-size:12px;">Log sweep</button>
+          <span style="font-size:11px;font-family:var(--mono);color:var(--ink-3);" id="gd-sweep-count">0 sweeps</span>
+          <button onclick="exportGDData()" style="padding:8px 14px;border:1px solid var(--sand-2);border-radius:var(--radius-sm);background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);margin-left:auto;">Export CSV</button>
+        </div>
+      </div>
+
+      <!-- TOOL 6: Student-TA Interaction -->
+      <div id="rtool-6" style="display:none;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;"><button onclick="showResearchTool(null)" style="padding:6px 12px;border:1px solid var(--sand-2);border-radius:7px;background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);">← Back</button><div style="font-size:14px;font-weight:600;">Student-TA Interaction Logger</div></div>
+        <div style="display:grid;grid-template-columns:320px 1fr;gap:20px;">
+          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:14px;padding:20px;">
+            <div style="font-size:11px;font-family:var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;">Log interaction</div>
+            <div style="font-size:12px;color:var(--ink-2);margin-bottom:6px;font-weight:500;">Initiated by</div>
+            <div style="display:flex;gap:8px;margin-bottom:14px;">
+              <button id="init-ta" onclick="setInitiator('TA')" style="flex:1;padding:8px;border:2px solid var(--orange);border-radius:8px;background:var(--orange);color:#fff;font-size:12px;font-weight:600;font-family:var(--sans);cursor:pointer;">TA</button>
+              <button id="init-student" onclick="setInitiator('Student')" style="flex:1;padding:8px;border:2px solid var(--sand-2);border-radius:8px;background:var(--white);color:var(--ink-2);font-size:12px;font-weight:600;font-family:var(--sans);cursor:pointer;">Student</button>
+            </div>
+            <div style="font-size:12px;color:var(--ink-2);margin-bottom:6px;font-weight:500;">Duration</div>
+            <div style="display:flex;gap:6px;margin-bottom:14px;">
+              <button onclick="setDuration('Quick')" id="dur-Quick" style="flex:1;padding:7px 4px;border:1px solid var(--sand-2);border-radius:7px;background:var(--white);font-size:11px;font-weight:600;font-family:var(--sans);cursor:pointer;color:var(--ink-2);"><div>Quick</div><div style="font-size:9px;opacity:0.6;">&lt;30s</div></button>
+              <button onclick="setDuration('Medium')" id="dur-Medium" style="flex:1;padding:7px 4px;border:1px solid var(--sand-2);border-radius:7px;background:var(--white);font-size:11px;font-weight:600;font-family:var(--sans);cursor:pointer;color:var(--ink-2);"><div>Medium</div><div style="font-size:9px;opacity:0.6;">30-90s</div></button>
+              <button onclick="setDuration('Long')" id="dur-Long" style="flex:1;padding:7px 4px;border:1px solid var(--sand-2);border-radius:7px;background:var(--white);font-size:11px;font-weight:600;font-family:var(--sans);cursor:pointer;color:var(--ink-2);"><div>Long</div><div style="font-size:9px;opacity:0.6;">&gt;90s</div></button>
+            </div>
+            <div style="font-size:12px;color:var(--ink-2);margin-bottom:6px;font-weight:500;">Table</div>
+            <select class="form-select" id="int-table" style="margin-bottom:14px;"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+            <button onclick="logInteraction()" class="submit-btn" style="width:100%;padding:10px;">Log interaction</button>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Interaction log</div>
+            <div id="int-log" style="background:var(--white);border:1px solid var(--sand-2);border-radius:12px;max-height:320px;overflow-y:auto;"></div>
+            <div id="int-summary" style="margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;"></div>
+            <button onclick="exportIntData()" style="margin-top:10px;padding:8px 14px;border:1px solid var(--sand-2);border-radius:var(--radius-sm);background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);">Export CSV</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL 7: Physics Reasoning Tracker -->
+      <div id="rtool-7" style="display:none;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;"><button onclick="showResearchTool(null)" style="padding:6px 12px;border:1px solid var(--sand-2);border-radius:7px;background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);">← Back</button><div style="font-size:14px;font-weight:600;">Physics Reasoning Tracker</div></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:700px;">
+          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:14px;padding:22px;">
+            <div style="font-size:11px;font-family:var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:14px;">Log a reasoning instance</div>
+            <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
+              <button onclick="logReasoning('Recalling facts')" style="padding:12px 14px;border:1px solid var(--teal);border-radius:10px;background:var(--teal-lt);color:var(--teal);text-align:left;cursor:pointer;font-family:var(--sans);" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                <div style="font-size:13px;font-weight:600;">Recalling facts</div>
+                <div style="font-size:10px;opacity:0.75;margin-top:2px;">Retrieving definitions or memorized info</div>
+              </button>
+              <button onclick="logReasoning('Applying formulas')" style="padding:12px 14px;border:1px solid var(--orange);border-radius:10px;background:var(--orange-lt);color:var(--orange);text-align:left;cursor:pointer;font-family:var(--sans);" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                <div style="font-size:13px;font-weight:600;">Applying formulas</div>
+                <div style="font-size:10px;opacity:0.75;margin-top:2px;">Plugging numbers into equations</div>
+              </button>
+              <button onclick="logReasoning('Conceptual reasoning')" style="padding:12px 14px;border:1px solid var(--blue);border-radius:10px;background:var(--blue-lt);color:var(--blue);text-align:left;cursor:pointer;font-family:var(--sans);" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                <div style="font-size:13px;font-weight:600;">Conceptual reasoning</div>
+                <div style="font-size:10px;opacity:0.75;margin-top:2px;">Explaining why, making sense of physics</div>
+              </button>
+              <button onclick="logReasoning('Analogical thinking')" style="padding:12px 14px;border:1px solid var(--purple);border-radius:10px;background:var(--purple-lt);color:var(--purple);text-align:left;cursor:pointer;font-family:var(--sans);" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+                <div style="font-size:13px;font-weight:600;">Analogical thinking</div>
+                <div style="font-size:10px;opacity:0.75;margin-top:2px;">Using analogies or real-world connections</div>
+              </button>
+            </div>
+            <select class="form-select" id="reasoning-table" style="margin-bottom:10px;"><option value="">All tables</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Reasoning log</div>
+            <div id="reasoning-summary" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;"></div>
+            <div id="reasoning-log" style="background:var(--white);border:1px solid var(--sand-2);border-radius:12px;max-height:260px;overflow-y:auto;"></div>
+            <button onclick="exportReasoningData()" style="margin-top:10px;padding:8px 14px;border:1px solid var(--sand-2);border-radius:var(--radius-sm);background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);">Export CSV</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL 8: Time-on-Task Sweep -->
+      <div id="rtool-8" style="display:none;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;"><button onclick="showResearchTool(null)" style="padding:6px 12px;border:1px solid var(--sand-2);border-radius:7px;background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);">← Back</button><div style="font-size:14px;font-weight:600;">Time-on-Task Sweep</div></div>
+        <div style="max-width:500px;">
+          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:14px;padding:24px;margin-bottom:16px;">
+            <div style="font-size:13px;font-weight:600;margin-bottom:6px;">What % of students appear actively engaged?</div>
+            <div style="font-size:12px;color:var(--ink-3);margin-bottom:20px;">Do a quick visual scan of the room and estimate.</div>
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:8px;">
+              <input type="range" id="tot-slider" min="0" max="100" value="70" oninput="document.getElementById('tot-value').textContent=this.value+'%'" style="flex:1;accent-color:var(--orange);">
+              <div style="font-size:28px;font-weight:700;font-family:var(--mono);color:var(--orange);min-width:60px;text-align:right;" id="tot-value">70%</div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:10px;font-family:var(--mono);color:var(--ink-3);margin-bottom:16px;"><span>0%</span><span>50%</span><span>100%</span></div>
+            <textarea id="tot-note" placeholder="Optional note…" class="form-textarea" style="min-height:50px;margin-bottom:14px;"></textarea>
+            <button onclick="logTOT()" class="submit-btn" style="width:100%;padding:10px;">Log sweep</button>
+          </div>
+          <div id="tot-log" style="background:var(--white);border:1px solid var(--sand-2);border-radius:12px;overflow:hidden;max-height:260px;overflow-y:auto;"></div>
+          <button onclick="exportTOTData()" style="margin-top:10px;padding:8px 14px;border:1px solid var(--sand-2);border-radius:var(--radius-sm);background:var(--white);font-size:12px;font-family:var(--sans);cursor:pointer;color:var(--ink-2);">Export CSV</button>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ── Research Tool Hub ────────────────────────────────────────────────────────
+const RESEARCH_TOOLS = [
+  { id:1, title:"Talking & Listening",      desc:"Track individual talking/listening at 1-min intervals", color:"var(--orange)", bg:"var(--orange-lt)", icon:'<circle cx="8" cy="8" r="3"/><path d="M1 8s2-5 7-5 7 5 7 5-2 5-7 5-7-5-7-5z"/>' },
+  { id:2, title:"Whiteboard Usage",          desc:"Log which tables write on the board and what type",      color:"var(--blue)",   bg:"var(--blue-lt)",   icon:'<rect x="1" y="2" width="14" height="10" rx="1.5"/><path d="M4 15h8M8 12v3"/>' },
+  { id:3, title:"TA Position Map",           desc:"Track where the TA stands during class over time",       color:"var(--green)",  bg:"var(--green-lt)",  icon:'<path d="M8 1a3 3 0 100 6 3 3 0 000-6z"/><path d="M2 14s-1-1 0-3c1-2 3-3 6-3s5 1 6 3c1 2 0 3 0 3"/>' },
+  { id:4, title:"Question Type Logger",      desc:"Classify TA and student questions as they happen",       color:"var(--purple)", bg:"var(--purple-lt)", icon:'<circle cx="8" cy="8" r="7"/><path d="M8 5v3M8 11v.5"/>' },
+  { id:5, title:"Group Dynamics Coder",      desc:"Rate each table: on-task, stuck, off-task, productive",  color:"var(--teal)",   bg:"var(--teal-lt)",   icon:'<rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/>' },
+  { id:6, title:"Student-TA Interactions",   desc:"Log who initiates, duration, and which table",           color:"var(--orange)", bg:"var(--orange-lt)", icon:'<path d="M14 10a1 1 0 01-1 1H4l-3 3V3a1 1 0 011-1h11a1 1 0 011 1v7z"/>' },
+  { id:7, title:"Physics Reasoning",         desc:"Code student reasoning: recall, apply, conceptual",      color:"var(--blue)",   bg:"var(--blue-lt)",   icon:'<path d="M8 1l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5z"/>' },
+  { id:8, title:"Time-on-Task Sweep",        desc:"Every 2 min: estimate % of students actively engaged",   color:"var(--green)",  bg:"var(--green-lt)",  icon:'<circle cx="8" cy="8" r="7"/><path d="M8 4v4l3 3"/>' },
+];
+
+let activeResearchTool = null;
+
+function renderResearchToolGrid() {
+  const grid = document.getElementById("research-tool-grid");
+  if (!grid) return;
+  grid.innerHTML = RESEARCH_TOOLS.map(t => `
+    <div onclick="showResearchTool(${t.id})"
+      style="background:var(--white);border:1px solid var(--sand-2);border-radius:12px;padding:16px;cursor:pointer;transition:all 0.15s;"
+      onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)';this.style.borderColor='${t.color}'"
+      onmouseout="this.style.boxShadow='';this.style.borderColor='var(--sand-2)'">
+      <div style="width:36px;height:36px;border-radius:9px;background:${t.bg};display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="${t.color}" stroke-width="1.5" stroke-linecap="round">${t.icon}</svg>
+      </div>
+      <div style="font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px;line-height:1.3;">${t.title}</div>
+      <div style="font-size:10px;color:var(--ink-3);line-height:1.5;">${t.desc}</div>
+    </div>`).join("");
+}
+
+function showResearchTool(id) {
+  document.getElementById("research-tool-grid").style.display = id ? "none" : "grid";
+  for (let i = 1; i <= 8; i++) {
+    const el = document.getElementById(`rtool-${i}`);
+    if (el) el.style.display = (id === i) ? "block" : "none";
+  }
+  activeResearchTool = id;
+  if (id === 2) renderWBTool();
+  if (id === 3) initTAPosMap();
+  if (id === 5) renderGDTool();
+  if (id === 4) { renderQSummary(); renderQLog(); }
+  if (id === 6) { renderIntLog(); renderIntSummary(); }
+  if (id === 7) { renderReasoningSummary(); renderReasoningLog(); }
+  if (id === 8) renderTOTLog();
+}
+
+// ── Tool 2: Whiteboard Usage ──────────────────────────────────────────────────
+const WB_TYPES = ["Equations","Diagram","Words","Empty"];
+const WB_TYPE_COLORS = { "Equations":"var(--blue)","Diagram":"var(--green)","Words":"var(--purple)","Empty":"var(--ink-3)" };
+const wbState = {}; // { tableId: type }
+const wbData = [];
+
+function renderWBTool() {
+  const n = parseInt(document.getElementById("wb-table-count")?.value || 6);
+  const grid = document.getElementById("wb-table-grid");
+  if (!grid) return;
+  grid.innerHTML = Array.from({length:n},(_,i)=>{
+    const id = i+1;
+    const sel = wbState[id] || null;
+    return `<div style="background:var(--white);border:1px solid var(--sand-2);border-radius:12px;padding:14px;">
+      <div style="font-size:12px;font-weight:600;margin-bottom:10px;">Table ${id}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        ${WB_TYPES.map(t=>`<button onclick="setWBType(${id},'${t}')"
+          style="padding:7px 4px;border:1px solid ${sel===t?WB_TYPE_COLORS[t]:"var(--sand-2)"};border-radius:7px;background:${sel===t?"rgba(0,0,0,0.05)":"var(--sand)"};color:${sel===t?WB_TYPE_COLORS[t]:"var(--ink-3)"};font-size:11px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:all 0.1s;">${t}</button>`).join("")}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function setWBType(id, type) { wbState[id] = type; renderWBTool(); }
+
+function logWBSweep() {
+  const n = parseInt(document.getElementById("wb-table-count")?.value || 6);
+  const sweep = { time: new Date().toLocaleTimeString(), tables: {} };
+  for (let i=1;i<=n;i++) sweep.tables[i] = wbState[i] || "Not observed";
+  wbData.push(sweep);
+  document.getElementById("wb-sweep-count").textContent = `${wbData.length} sweeps logged`;
+  Object.keys(wbState).forEach(k => delete wbState[k]);
+  renderWBTool();
+}
+
+function exportWBData() {
+  if (!wbData.length) { alert("No sweeps logged yet."); return; }
+  const tables = Object.keys(wbData[0].tables);
+  let csv = "Sweep,Time," + tables.map(t=>`Table ${t}`).join(",") + "\n";
+  wbData.forEach((d,i) => { csv += `${i+1},${d.time},${tables.map(t=>d.tables[t]).join(",")}\n`; });
+  downloadCSV(csv, "whiteboard_usage");
+}
+
+// ── Tool 3: TA Position Map ───────────────────────────────────────────────────
+const taPosData = [];
+let taPosMapTables = [];
+
+function initTAPosMap() {
+  const n = parseInt(document.getElementById("ta-pos-table-count")?.value || 6);
+  taPosMapTables = Array.from({length: n}, (_, i) => ({
+    id: i + 1,
+    pos: { x: 10 + (i % 2) * 130, y: 10 + Math.floor(i / 2) * 105 }
+  }));
+  renderTAPosMap();
+}
+
+function renderTAPosMap() {
+  const n = parseInt(document.getElementById("ta-pos-table-count")?.value || 6);
+  // If count changed, reinit
+  if (taPosMapTables.length !== n) {
+    taPosMapTables = Array.from({length: n}, (_, i) => ({
+      id: i + 1,
+      pos: { x: 10 + (i % 2) * 130, y: 10 + Math.floor(i / 2) * 105 }
+    }));
+  }
+  const canvas = document.getElementById("ta-pos-canvas");
+  if (!canvas) return;
+
+  // Remove existing table nodes (keep position dots)
+  canvas.querySelectorAll(".ta-pos-table-node").forEach(el => el.remove());
+
+  taPosMapTables.forEach((t, i) => {
+    const div = document.createElement("div");
+    div.className = "ta-pos-table-node";
+    div.draggable = true;
+    div.style.cssText = `position:absolute;left:${t.pos.x}px;top:${t.pos.y}px;width:82px;height:60px;background:var(--blue-lt);border:2px solid var(--blue-md);border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:grab;user-select:none;z-index:2;`;
+    div.innerHTML = `<div style="font-size:9px;font-weight:700;color:var(--blue);font-family:var(--mono);letter-spacing:0.05em;">TABLE</div><div style="font-size:18px;font-weight:700;color:var(--blue);font-family:var(--mono);">${t.id}</div>`;
+    div.onclick = e => e.stopPropagation(); // don't log position when dragging table
+    div.ondragstart = e => {
+      e.dataTransfer.setData("tpi", i);
+      e.dataTransfer.setData("tpox", e.clientX - canvas.getBoundingClientRect().left - t.pos.x);
+      e.dataTransfer.setData("tpoy", e.clientY - canvas.getBoundingClientRect().top - t.pos.y);
+    };
+    canvas.appendChild(div);
+  });
+}
+
+function dropTAPosTable(e) {
+  e.preventDefault();
+  const canvas = document.getElementById("ta-pos-canvas");
+  const i = parseInt(e.dataTransfer.getData("tpi"));
+  if (isNaN(i)) return;
+  const ox = parseFloat(e.dataTransfer.getData("tpox")) || 0;
+  const oy = parseFloat(e.dataTransfer.getData("tpoy")) || 0;
+  const rect = canvas.getBoundingClientRect();
+  taPosMapTables[i].pos = {
+    x: Math.max(0, Math.min(e.clientX - rect.left - ox, rect.width - 84)),
+    y: Math.max(0, Math.min(e.clientY - rect.top - oy, rect.height - 62))
+  };
+  renderTAPosMap();
+}
+
+function getNearestTable(x, y) {
+  if (!taPosMapTables.length) return null;
+  let nearest = null, minDist = Infinity;
+  taPosMapTables.forEach(t => {
+    const cx = t.pos.x + 41, cy = t.pos.y + 30;
+    const dist = Math.sqrt((x - cx) ** 2 + (y - cy) ** 2);
+    if (dist < minDist) { minDist = dist; nearest = t; }
+  });
+  return minDist < 80 ? `Table ${nearest.id}` : null;
+}
+
+function logTAPosition(event, label) {
+  const canvas = document.getElementById("ta-pos-canvas");
+  let x = null, y = null, desc = label || "map click", nearTable = "";
+  if (event && canvas) {
+    const rect = canvas.getBoundingClientRect();
+    x = Math.round(((event.clientX - rect.left) / rect.width) * 100);
+    y = Math.round(((event.clientY - rect.top) / rect.height) * 100);
+    const px = event.clientX - rect.left;
+    const py = event.clientY - rect.top;
+    nearTable = getNearestTable(px, py) || "";
+    desc = nearTable ? `Near ${nearTable}` : `Open area (${x}%,${y}%)`;
+
+    // Draw dot
+    const dot = document.createElement("div");
+    dot.style.cssText = `position:absolute;left:${px}px;top:${py}px;width:14px;height:14px;background:var(--orange);border-radius:50%;border:2px solid #fff;transform:translate(-50%,-50%);box-shadow:0 1px 4px rgba(0,0,0,0.25);z-index:10;pointer-events:none;`;
+    const num = document.createElement("span");
+    num.style.cssText = `position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:9px;font-family:var(--mono);font-weight:700;color:var(--orange);white-space:nowrap;`;
+    num.textContent = taPosData.length + 1;
+    dot.appendChild(num);
+    canvas.appendChild(dot);
+  }
+  taPosData.push({ time: new Date().toLocaleTimeString(), desc, nearTable, x, y });
+  renderTAPosLog();
+}
+
+function renderTAPosLog() {
+  const log = document.getElementById("ta-pos-log");
+  const count = document.getElementById("ta-pos-count");
+  if (!log) return;
+  log.innerHTML = taPosData.slice().reverse().map((d, i) => `
+    <div style="padding:9px 14px;border-bottom:1px solid var(--sand-2);display:flex;gap:10px;align-items:center;font-size:12px;">
+      <span style="font-family:var(--mono);color:var(--ink-3);font-size:10px;min-width:58px;">${d.time}</span>
+      <span style="color:var(--ink-2);flex:1;">${d.desc}</span>
+      ${d.nearTable ? `<span style="font-size:10px;background:var(--blue-lt);color:var(--blue);padding:2px 7px;border-radius:20px;font-family:var(--mono);white-space:nowrap;">${d.nearTable}</span>` : ""}
+    </div>`).join("") || `<div style="padding:20px;text-align:center;color:var(--ink-3);font-size:13px;">Click the map to log TA positions</div>`;
+  if (count) count.textContent = `${taPosData.length} positions logged`;
+}
+
+function exportTAPosData() {
+  if (!taPosData.length) { alert("No positions logged."); return; }
+  let csv = "Log#,Time,Description,NearestTable,X%,Y%\n";
+  taPosData.forEach((d, i) => { csv += `${i+1},${d.time},"${d.desc}","${d.nearTable}",${d.x??''},${d.y??''}\n`; });
+  downloadCSV(csv, "ta_position");
+}
+
+// ── Tool 4: Question Type Logger ─────────────────────────────────────────────
+const qData = [];
+let qAsker = "TA";
+
+function setQAsker(a) {
+  qAsker = a;
+  document.getElementById("qasker-ta").style.background = a==="TA"?"var(--orange)":"var(--white)";
+  document.getElementById("qasker-ta").style.color = a==="TA"?"#fff":"var(--ink-2)";
+  document.getElementById("qasker-ta").style.borderColor = a==="TA"?"var(--orange)":"var(--sand-2)";
+  document.getElementById("qasker-student").style.background = a==="Student"?"var(--blue)":"var(--white)";
+  document.getElementById("qasker-student").style.color = a==="Student"?"#fff":"var(--ink-2)";
+  document.getElementById("qasker-student").style.borderColor = a==="Student"?"var(--blue)":"var(--sand-2)";
+}
+
+function logQuestion(type) {
+  const note = document.getElementById("q-note")?.value || "";
+  qData.push({ time: new Date().toLocaleTimeString(), type, asker: qAsker, note });
+  document.getElementById("q-note").value = "";
+  renderQSummary(); renderQLog();
+}
+
+function renderQSummary() {
+  const el = document.getElementById("q-summary");
+  if (!el) return;
+  const types = ["Conceptual","Procedural","Leading","Open-ended"];
+  const cols = ["var(--orange)","var(--blue)","var(--green)","var(--purple)"];
+  const bgs = ["var(--orange-lt)","var(--blue-lt)","var(--green-lt)","var(--purple-lt)"];
+  el.innerHTML = types.map((t,i) => {
+    const n = qData.filter(d=>d.type===t).length;
+    return `<div style="background:${bgs[i]};border-radius:8px;padding:10px;text-align:center;"><div style="font-size:20px;font-weight:700;color:${cols[i]};">${n}</div><div style="font-size:10px;color:${cols[i]};font-family:var(--mono);">${t}</div></div>`;
+  }).join("");
+}
+
+function renderQLog() {
+  const el = document.getElementById("q-log");
+  if (!el) return;
+  el.innerHTML = qData.slice().reverse().map(d=>`
+    <div style="padding:8px 14px;border-bottom:1px solid var(--sand-2);display:flex;gap:8px;align-items:center;font-size:12px;">
+      <span style="font-family:var(--mono);color:var(--ink-3);font-size:10px;min-width:58px;">${d.time}</span>
+      <span style="font-weight:600;color:var(--ink);">${d.type}</span>
+      <span style="font-size:10px;background:var(--sand-2);color:var(--ink-3);padding:1px 6px;border-radius:10px;">${d.asker}</span>
+      ${d.note?`<span style="color:var(--ink-3);font-size:11px;">${d.note}</span>`:""}
+    </div>`).join("") || `<div style="padding:20px;text-align:center;color:var(--ink-3);font-size:13px;">No questions logged yet</div>`;
+}
+
+function exportQData() {
+  if (!qData.length) { alert("No questions logged."); return; }
+  let csv = "Log#,Time,Type,AskedBy,Note\n";
+  qData.forEach((d,i) => { csv += `${i+1},${d.time},${d.type},${d.asker},"${d.note}"\n`; });
+  downloadCSV(csv, "question_types");
+}
+
+// ── Tool 5: Group Dynamics ────────────────────────────────────────────────────
+const GD_STATES = ["On-task","Productive","Stuck","Off-task"];
+const GD_COLORS = {"On-task":"var(--green)","Productive":"var(--blue)","Stuck":"var(--orange)","Off-task":"#E53E3E"};
+const GD_BG = {"On-task":"var(--green-lt)","Productive":"var(--blue-lt)","Stuck":"var(--orange-lt)","Off-task":"#FFF5F5"};
+const gdState = {};
+const gdData = [];
+
+function renderGDTool() {
+  const n = parseInt(document.getElementById("gd-table-count")?.value || 6);
+  const grid = document.getElementById("gd-table-grid");
+  if (!grid) return;
+  grid.innerHTML = Array.from({length:n},(_,i)=>{
+    const id=i+1; const sel=gdState[id]||null;
+    return `<div style="background:var(--white);border:1px solid ${sel?GD_COLORS[sel]:"var(--sand-2)"};border-radius:12px;padding:14px;${sel?`border-left:4px solid ${GD_COLORS[sel]};`:""}">
+      <div style="font-size:12px;font-weight:600;margin-bottom:10px;">Table ${id}</div>
+      <div style="display:flex;flex-direction:column;gap:5px;">
+        ${GD_STATES.map(s=>`<button onclick="setGDState(${id},'${s}')"
+          style="padding:6px 10px;border:1px solid ${sel===s?GD_COLORS[s]:"var(--sand-2)"};border-radius:7px;background:${sel===s?GD_BG[s]:"var(--sand)"};color:${sel===s?GD_COLORS[s]:"var(--ink-3)"};font-size:11px;font-weight:600;font-family:var(--sans);cursor:pointer;text-align:left;">${s}</button>`).join("")}
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function setGDState(id, state) { gdState[id]=state; renderGDTool(); }
+
+function logGDSweep() {
+  const n = parseInt(document.getElementById("gd-table-count")?.value||6);
+  const sweep = { time:new Date().toLocaleTimeString(), tables:{} };
+  for(let i=1;i<=n;i++) sweep.tables[i]=gdState[i]||"Not coded";
+  gdData.push(sweep);
+  document.getElementById("gd-sweep-count").textContent=`${gdData.length} sweeps`;
+  Object.keys(gdState).forEach(k=>delete gdState[k]);
+  renderGDTool();
+}
+
+function exportGDData() {
+  if(!gdData.length){alert("No sweeps logged.");return;}
+  const tables=Object.keys(gdData[0].tables);
+  let csv="Sweep,Time,"+tables.map(t=>`Table ${t}`).join(",")+"\n";
+  gdData.forEach((d,i)=>{csv+=`${i+1},${d.time},${tables.map(t=>d.tables[t]).join(",")}\n`;});
+  downloadCSV(csv,"group_dynamics");
+}
+
+// ── Tool 6: Student-TA Interactions ──────────────────────────────────────────
+const intData = [];
+let intInitiator = "TA";
+let intDuration = "Quick";
+
+function setInitiator(a) {
+  intInitiator=a;
+  ["TA","Student"].forEach(x=>{
+    const b=document.getElementById(`init-${x.toLowerCase()}`);
+    if(!b)return;
+    const active=x===a;
+    b.style.background=active?(x==="TA"?"var(--orange)":"var(--blue)"):"var(--white)";
+    b.style.color=active?"#fff":"var(--ink-2)";
+    b.style.borderColor=active?(x==="TA"?"var(--orange)":"var(--blue)"):"var(--sand-2)";
+  });
+}
+
+function setDuration(d) {
+  intDuration=d;
+  ["Quick","Medium","Long"].forEach(x=>{
+    const b=document.getElementById(`dur-${x}`);
+    if(!b)return;
+    const active=x===d;
+    b.style.background=active?"var(--blue-lt)":"var(--white)";
+    b.style.color=active?"var(--blue)":"var(--ink-2)";
+    b.style.borderColor=active?"var(--blue-md)":"var(--sand-2)";
+  });
+}
+
+function logInteraction() {
+  const table=document.getElementById("int-table")?.value||"?";
+  intData.push({time:new Date().toLocaleTimeString(),initiator:intInitiator,duration:intDuration,table});
+  renderIntLog(); renderIntSummary();
+}
+
+function renderIntLog() {
+  const el=document.getElementById("int-log"); if(!el)return;
+  el.innerHTML=intData.slice().reverse().map(d=>`
+    <div style="padding:8px 14px;border-bottom:1px solid var(--sand-2);display:flex;gap:8px;align-items:center;font-size:12px;">
+      <span style="font-family:var(--mono);color:var(--ink-3);font-size:10px;min-width:58px;">${d.time}</span>
+      <span style="font-weight:600;">${d.initiator}</span>
+      <span style="font-size:10px;background:var(--sand-2);color:var(--ink-3);padding:1px 6px;border-radius:10px;">${d.duration}</span>
+      <span style="font-size:10px;color:var(--ink-3);">Table ${d.table}</span>
+    </div>`).join("")||`<div style="padding:20px;text-align:center;color:var(--ink-3);font-size:13px;">No interactions logged</div>`;
+}
+
+function renderIntSummary() {
+  const el=document.getElementById("int-summary"); if(!el)return;
+  const taCount=intData.filter(d=>d.initiator==="TA").length;
+  const stuCount=intData.filter(d=>d.initiator==="Student").length;
+  const total=intData.length;
+  el.innerHTML=[
+    ["Total",total,"var(--ink)","var(--sand-2)"],
+    ["TA init",taCount,"var(--orange)","var(--orange-lt)"],
+    ["Student init",stuCount,"var(--blue)","var(--blue-lt)"]
+  ].map(([l,n,c,bg])=>`<div style="background:${bg};border-radius:8px;padding:10px;text-align:center;"><div style="font-size:20px;font-weight:700;color:${c};">${n}</div><div style="font-size:10px;color:${c};font-family:var(--mono);">${l}</div></div>`).join("");
+}
+
+function exportIntData() {
+  if(!intData.length){alert("No interactions logged.");return;}
+  let csv="Log#,Time,Initiator,Duration,Table\n";
+  intData.forEach((d,i)=>{csv+=`${i+1},${d.time},${d.initiator},${d.duration},${d.table}\n`;});
+  downloadCSV(csv,"interactions");
+}
+
+// ── Tool 7: Physics Reasoning ─────────────────────────────────────────────────
+const reasoningData=[];
+
+function logReasoning(type) {
+  const table=document.getElementById("reasoning-table")?.value||"All";
+  reasoningData.push({time:new Date().toLocaleTimeString(),type,table});
+  renderReasoningSummary(); renderReasoningLog();
+}
+
+function renderReasoningSummary() {
+  const el=document.getElementById("reasoning-summary"); if(!el)return;
+  const types=["Recalling facts","Applying formulas","Conceptual reasoning","Analogical thinking"];
+  const cols=["var(--teal)","var(--orange)","var(--blue)","var(--purple)"];
+  const bgs=["var(--teal-lt)","var(--orange-lt)","var(--blue-lt)","var(--purple-lt)"];
+  el.innerHTML=types.map((t,i)=>{
+    const n=reasoningData.filter(d=>d.type===t).length;
+    return `<div style="background:${bgs[i]};border-radius:8px;padding:8px;text-align:center;"><div style="font-size:18px;font-weight:700;color:${cols[i]};">${n}</div><div style="font-size:9px;color:${cols[i]};font-family:var(--mono);line-height:1.3;">${t}</div></div>`;
+  }).join("");
+}
+
+function renderReasoningLog() {
+  const el=document.getElementById("reasoning-log"); if(!el)return;
+  el.innerHTML=reasoningData.slice().reverse().map(d=>`
+    <div style="padding:8px 14px;border-bottom:1px solid var(--sand-2);display:flex;gap:8px;font-size:12px;align-items:center;">
+      <span style="font-family:var(--mono);color:var(--ink-3);font-size:10px;min-width:58px;">${d.time}</span>
+      <span style="font-weight:600;color:var(--ink);">${d.type}</span>
+      ${d.table!=="All"?`<span style="font-size:10px;color:var(--ink-3);">Table ${d.table}</span>`:""}
+    </div>`).join("")||`<div style="padding:20px;text-align:center;color:var(--ink-3);font-size:13px;">No instances logged</div>`;
+}
+
+function exportReasoningData() {
+  if(!reasoningData.length){alert("No instances logged.");return;}
+  let csv="Log#,Time,Type,Table\n";
+  reasoningData.forEach((d,i)=>{csv+=`${i+1},${d.time},${d.type},${d.table}\n`;});
+  downloadCSV(csv,"physics_reasoning");
+}
+
+// ── Tool 8: Time-on-Task ──────────────────────────────────────────────────────
+const totData=[];
+
+function logTOT() {
+  const val=parseInt(document.getElementById("tot-slider")?.value||70);
+  const note=document.getElementById("tot-note")?.value||"";
+  totData.push({time:new Date().toLocaleTimeString(),pct:val,note});
+  document.getElementById("tot-note").value="";
+  renderTOTLog();
+}
+
+function renderTOTLog() {
+  const el=document.getElementById("tot-log"); if(!el)return;
+  el.innerHTML=totData.slice().reverse().map((d,i)=>`
+    <div style="padding:10px 16px;border-bottom:1px solid var(--sand-2);display:flex;align-items:center;gap:12px;">
+      <span style="font-family:var(--mono);color:var(--ink-3);font-size:10px;min-width:58px;">${d.time}</span>
+      <div style="flex:1;height:6px;background:var(--sand-2);border-radius:3px;overflow:hidden;"><div style="height:100%;background:${d.pct>=70?"var(--green)":d.pct>=40?"var(--orange)":"#E53E3E"};border-radius:3px;width:${d.pct}%;"></div></div>
+      <span style="font-size:14px;font-weight:700;font-family:var(--mono);color:${d.pct>=70?"var(--green)":d.pct>=40?"var(--orange)":"#E53E3E"};min-width:38px;text-align:right;">${d.pct}%</span>
+      ${d.note?`<span style="font-size:11px;color:var(--ink-3);">${d.note}</span>`:""}
+    </div>`).join("")||`<div style="padding:20px;text-align:center;color:var(--ink-3);font-size:13px;">No sweeps logged yet</div>`;
+}
+
+function exportTOTData() {
+  if(!totData.length){alert("No sweeps logged.");return;}
+  let csv="Log#,Time,Engagement%,Note\n";
+  totData.forEach((d,i)=>{csv+=`${i+1},${d.time},${d.pct},"${d.note}"\n`;});
+  downloadCSV(csv,"time_on_task");
+}
+
+// ── Shared CSV export helper ──────────────────────────────────────────────────
+function downloadCSV(csv, name) {
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+  a.download=`${name}_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+let obsState = {
+  tables: [], selectedTable: 0, interval: 1,
+  timerSeconds: 60, timerRunning: false, timerHandle: null, data: [],
+};
+
+function startObservation() {
+  const n = parseInt(document.getElementById("obs-table-count").value);
+  const course = document.getElementById("obs-course").value;
+  const dt = document.getElementById("obs-datetime").value;
+  obsState.tables = Array.from({length: n}, (_, i) => ({
+    id: i+1,
+    pos: { x: 10 + (i % 2) * 120, y: 10 + Math.floor(i / 2) * 100 },
+    students: [{id:1,name:"Person 1",talking:false,listening:false},{id:2,name:"Person 2",talking:false,listening:false},{id:3,name:"Person 3",talking:false,listening:false},{id:4,name:"Person 4",talking:false,listening:false}]
+  }));
+  obsState.selectedTable = 0; obsState.interval = 1; obsState.timerSeconds = 60; obsState.data = [];
+  document.getElementById("obs-setup").style.display = "none";
+  document.getElementById("obs-tool").style.display = "block";
+  document.getElementById("obs-course-label").textContent = course;
+  document.getElementById("obs-datetime-label").textContent = dt ? new Date(dt).toLocaleString("en-US",{weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}) : new Date().toLocaleString();
+  renderTableList(); selectTable(0);
+}
+
+function renderTableList() {
+  renderClassroomMap();
+}
+
+function renderClassroomMap() {
+  const canvas = document.getElementById("classroom-canvas");
+  if (!canvas) return;
+  canvas.innerHTML = "";
+  obsState.tables.forEach((t, i) => {
+    if (!t.pos) t.pos = { x: 30 + (i % 2) * 130, y: 20 + Math.floor(i / 2) * 110 };
+    const isSelected = i === obsState.selectedTable;
+    const div = document.createElement("div");
+    div.draggable = true;
+    div.style.cssText = `position:absolute;left:${t.pos.x}px;top:${t.pos.y}px;width:90px;height:72px;background:${isSelected?"var(--orange)":"var(--white)"};border:2px solid ${isSelected?"var(--orange)":"var(--sand-3)"};border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;box-shadow:${isSelected?"0 4px 14px rgba(232,74,0,0.3)":"0 1px 4px rgba(0,0,0,0.08)"};user-select:none;transition:box-shadow 0.15s;`;
+    div.innerHTML = `<div style="font-size:9px;font-weight:700;color:${isSelected?"#fff":"var(--ink-3)"};font-family:var(--mono);letter-spacing:0.05em;">TABLE</div><div style="font-size:20px;font-weight:700;color:${isSelected?"#fff":"var(--blue)"};font-family:var(--mono);">${t.id}</div><div style="font-size:9px;color:${isSelected?"rgba(255,255,255,0.7)":"var(--ink-3)"};">${t.students.length} stu</div>`;
+    div.onclick = () => selectTable(i);
+    div.ondragstart = (e) => {
+      e.dataTransfer.setData("ti", i);
+      e.dataTransfer.setData("ox", e.clientX - canvas.getBoundingClientRect().left - t.pos.x);
+      e.dataTransfer.setData("oy", e.clientY - canvas.getBoundingClientRect().top - t.pos.y);
+    };
+    canvas.appendChild(div);
+  });
+}
+
+function dropTable(e) {
+  e.preventDefault();
+  const canvas = document.getElementById("classroom-canvas");
+  const i = parseInt(e.dataTransfer.getData("ti"));
+  const ox = parseFloat(e.dataTransfer.getData("ox")) || 0;
+  const oy = parseFloat(e.dataTransfer.getData("oy")) || 0;
+  const rect = canvas.getBoundingClientRect();
+  obsState.tables[i].pos = {
+    x: Math.max(0, Math.min(e.clientX - rect.left - ox, 144)),
+    y: Math.max(0, Math.min(e.clientY - rect.top - oy, 286))
+  };
+  renderClassroomMap();
+}
+
+function selectTable(i) {
+  obsState.selectedTable = i;
+  document.getElementById("obs-selected-table-label").textContent = `Table ${obsState.tables[i].id} · ${obsState.tables[i].students.length} students`;
+  renderStudentGrid(); renderClassroomMap();
+}
+
+function renderStudentGrid() {
+  const t = obsState.tables[obsState.selectedTable];
+  document.getElementById("obs-student-grid").innerHTML = t.students.map(s => `
+    <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:12px;padding:16px;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:12px;">${s.name}</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:13px;color:var(--ink-2);">Talking</span>
+          <button onclick="toggleObs(${s.id},'talking')" style="width:52px;height:26px;border-radius:13px;border:none;cursor:pointer;font-size:10px;font-weight:700;font-family:var(--mono);background:${s.talking?"var(--green)":"#E53E3E"};color:#fff;">${s.talking?"ON":"OFF"}</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:13px;color:var(--ink-2);">Listening</span>
+          <button onclick="toggleObs(${s.id},'listening')" style="width:52px;height:26px;border-radius:13px;border:none;cursor:pointer;font-size:10px;font-weight:700;font-family:var(--mono);background:${s.listening?"var(--green)":"#E53E3E"};color:#fff;">${s.listening?"ON":"OFF"}</button>
+        </div>
+      </div>
+    </div>`).join("");
+}
+
+function toggleObs(studentId, field) {
+  const s = obsState.tables[obsState.selectedTable].students.find(x => x.id === studentId);
+  if (s) { s[field] = !s[field]; renderStudentGrid(); }
+}
+
+function addStudent() {
+  const t = obsState.tables[obsState.selectedTable];
+  const newId = Math.max(...t.students.map(s=>s.id),0)+1;
+  t.students.push({id:newId,name:`Person ${newId}`,talking:false,listening:false});
+  selectTable(obsState.selectedTable);
+}
+
+function removeStudent() {
+  const t = obsState.tables[obsState.selectedTable];
+  if (t.students.length > 1) { t.students.pop(); selectTable(obsState.selectedTable); }
+}
+
+function addTable() {
+  const newId = obsState.tables.length + 1;
+  const i = obsState.tables.length;
+  // Fit within 236px wide canvas, 2-column layout
+  obsState.tables.push({
+    id: newId,
+    pos: { x: 10 + (i % 2) * 120, y: 10 + Math.floor(i / 2) * 100 },
+    students: [
+      {id:1,name:"Person 1",talking:false,listening:false},
+      {id:2,name:"Person 2",talking:false,listening:false},
+      {id:3,name:"Person 3",talking:false,listening:false},
+      {id:4,name:"Person 4",talking:false,listening:false}
+    ]
+  });
+  renderClassroomMap();
+}
+
+function toggleTimer() {
+  const btn = document.getElementById("obs-timer-btn");
+  if (obsState.timerRunning) {
+    clearInterval(obsState.timerHandle); obsState.timerRunning = false;
+    btn.textContent = "Resume"; btn.style.background = "var(--blue)";
+  } else {
+    obsState.timerRunning = true; btn.textContent = "Pause"; btn.style.background = "var(--orange)";
+    obsState.timerHandle = setInterval(() => {
+      obsState.timerSeconds--;
+      const m = Math.floor(obsState.timerSeconds/60).toString().padStart(2,"0");
+      const s = (obsState.timerSeconds%60).toString().padStart(2,"0");
+      const el = document.getElementById("obs-timer");
+      el.textContent = `${m}:${s}`;
+      el.style.color = obsState.timerSeconds <= 10 ? "var(--orange)" : "var(--blue)";
+      if (obsState.timerSeconds <= 0) {
+        clearInterval(obsState.timerHandle); obsState.timerRunning = false;
+        btn.textContent = "Start"; btn.style.background = "var(--blue)";
+      }
+    }, 1000);
+  }
+}
+
+function submitInterval() {
+  obsState.data.push({interval:obsState.interval,time:new Date().toLocaleTimeString(),tables:JSON.parse(JSON.stringify(obsState.tables)),notes:document.getElementById("obs-notes").value});
+  obsState.interval++;
+  document.getElementById("obs-interval-label").textContent = `Interval ${obsState.interval}`;
+  document.getElementById("obs-notes").value = "";
+  clearInterval(obsState.timerHandle); obsState.timerRunning = false; obsState.timerSeconds = 60;
+  document.getElementById("obs-timer").textContent = "01:00";
+  document.getElementById("obs-timer").style.color = "var(--blue)";
+  document.getElementById("obs-timer-btn").textContent = "Start";
+  document.getElementById("obs-timer-btn").style.background = "var(--blue)";
+  obsState.tables.forEach(t => t.students.forEach(s => {s.talking=false;s.listening=false;}));
+  renderStudentGrid(); renderClassroomMap();
+  alert(`✓ Interval ${obsState.interval-1} recorded! ${obsState.data.length} total intervals saved.`);
+}
+
+function resetObservation() {
+  if (confirm("Reset? All data will be lost.")) {
+    clearInterval(obsState.timerHandle);
+    document.getElementById("obs-setup").style.display = "block";
+    document.getElementById("obs-tool").style.display = "none";
+  }
+}
+
+function exportData() {
+  if (!obsState.data.length) { alert("No intervals recorded yet."); return; }
+  let csv = "Interval,Time,Table,Student,Talking,Listening,Notes\n";
+  obsState.data.forEach(d => d.tables.forEach(t => t.students.forEach(s => {
+    csv += `${d.interval},${d.time},Table ${t.id},${s.name},${s.talking?1:0},${s.listening?1:0},"${d.notes}"\n`;
+  })));
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
+  a.download = `observation_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+// ── Real Box Folder Data ────────────────────────────────────────────────────
+const BOX_WEEKS = [
+  { name: "Week 1", id: "379166527000" },
+  { name: "Week 2", id: "379167801261" },
+  { name: "Week 3", id: "379165319446" },
+  { name: "Week 4", id: "379167076074" },
+  { name: "Week 5", id: "379169423610" },
+];
+
+const WEEK_COLORS = [
+  { bg: "#FFF0EA", border: "#FFD4C0", color: "#E84A00" },
+  { bg: "#E8EEF6", border: "#C2D0E4", color: "#13294B" },
+  { bg: "#E8F5EE", border: "#A7D9BB", color: "#1A6B3C" },
+  { bg: "#F0ECFC", border: "#C9BCF4", color: "#5B3FA6" },
+  { bg: "#E6F4F4", border: "#9DD0D0", color: "#0B6E6E" },
+];
+
+function renderWeekGrid() {
+  const grid = document.getElementById("week-grid");
+  grid.innerHTML = BOX_WEEKS.map((w, i) => {
+    const c = WEEK_COLORS[i % WEEK_COLORS.length];
+    return `
+    <div onclick="openWeek('${w.id}','${w.name}')"
+      style="background:${c.bg};border:1px solid ${c.border};border-radius:14px;padding:20px;cursor:pointer;transition:all 0.15s;display:flex;flex-direction:column;gap:12px;"
+      onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 4px 16px rgba(0,0,0,0.1)'"
+      onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div style="width:40px;height:40px;border-radius:10px;background:${c.color};display:flex;align-items:center;justify-content:center;">
+        <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round">
+          <path d="M1 4a1 1 0 011-1h4l2 2h6a1 1 0 011 1v7a1 1 0 01-1 1H2a1 1 0 01-1-1V4z"/>
+        </svg>
+      </div>
+      <div>
+        <div style="font-size:14px;font-weight:600;color:${c.color};letter-spacing:-0.01em;">${w.name}</div>
+        <div style="font-size:11px;color:${c.color};opacity:0.7;margin-top:2px;font-family:var(--mono)">Illinois Box · PHYS 211</div>
+      </div>
+      <div style="font-size:11px;color:${c.color};display:flex;align-items:center;gap:4px;font-weight:500;">
+        Open folder →
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function openWeek(folderId, folderName) {
+  document.getElementById("week-grid").style.display = "none";
+  document.getElementById("week-detail").style.display = "block";
+  document.getElementById("week-detail-title").textContent = folderName;
+
+  const container = document.getElementById("week-files-container");
+  container.innerHTML = `
+    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px;gap:14px;color:var(--ink-3);">
+      <svg width="32" height="32" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <path d="M1 4a1 1 0 011-1h4l2 2h6a1 1 0 011 1v7a1 1 0 01-1 1H2a1 1 0 01-1-1V4z"/>
+      </svg>
+      <div style="font-size:14px;font-weight:500;color:var(--ink-2)">This folder is empty</div>
+      <div style="font-size:12px;text-align:center;line-height:1.6;">
+        Add files to <strong>${folderName}</strong> in Illinois Box and they'll appear here automatically.<br>
+        <a href="https://app.box.com/folder/${folderId}" target="_blank" style="color:var(--orange);text-decoration:none;font-weight:500;">Open in Box ↗</a>
+      </div>
+    </div>`;
+
+  document.getElementById("week-detail-count").textContent = "0 files";
+}
+
+function backToWeeks() {
+  document.getElementById("week-grid").style.display = "grid";
+  document.getElementById("week-detail").style.display = "none";
+}
+
+// ── First Time TA Modules ────────────────────────────────────────────────────
+const TA_MODULES = [
+  { id:1,  title:"Collaborative Learning and Norm Setting",       desc:"Establish group norms, build trust, and set expectations for productive collaborative learning environments.",       icon:"M3 5h10M3 8h7M3 11h4", color:"orange" },
+  { id:2,  title:"Feedback and Grading",                          desc:"Learn evidence-based strategies for giving effective, actionable feedback that promotes student growth.",              icon:"M2 4h12M2 8h8M2 12h5", color:"blue"   },
+  { id:3,  title:"Students' Resistance to Collaborative Group Work", desc:"Understand why students resist group work and learn practical techniques to address and reduce that resistance.", icon:"M8 1a3 3 0 100 6 3 3 0 000-6zM2 14s1-3 6-3 6 3 6 3", color:"purple" },
+  { id:4,  title:"Common Issues in Collaborative Group Work",     desc:"Identify and navigate the most frequent challenges: dominant students, free riders, and unproductive dynamics.",    icon:"M2 8h12M8 2v12",        color:"teal"   },
+  { id:5,  title:"Review of Collaborative Group Work",            desc:"Synthesize your understanding of group work facilitation and reflect on your first weeks as a discussion TA.",      icon:"M2 8l4 4 8-8",          color:"green"  },
+  { id:6,  title:"Problem Structures",                            desc:"Explore how problem design shapes student thinking — open vs. closed, scaffolded vs. independent, and more.",        icon:"M3 3h10v10H3z",         color:"orange" },
+  { id:7,  title:"Supporting Collaborative Learning",             desc:"Develop your toolkit for actively supporting groups: when to intervene, when to step back, and how to ask good questions.", icon:"M8 2v12M2 8h12",   color:"blue"   },
+  { id:8,  title:"How does good collaboration look like?",        desc:"Examine real examples of productive collaboration and develop your eye for what to look for in your own classroom.", icon:"M2 5h12M2 11h12M5 2v12", color:"purple"},
+  { id:9,  title:"Review of Problem-Based Learning",              desc:"Revisit the principles of problem-based learning and connect them to your classroom practice this semester.",       icon:"M8 1l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5z", color:"teal" },
+  { id:10, title:"Survey",                                         desc:"Complete the end-of-training survey to share your experience and help improve this professional development program.", icon:"M3 2h10v12H3zM6 6h4M6 9h4M6 12h2", color:"green" },
+];
+
+const taCompleted = new Set();
+
+const TA_COLORS = {
+  orange: { bg:"var(--orange-lt)", border:"var(--orange-md)", color:"var(--orange)" },
+  blue:   { bg:"var(--blue-lt)",   border:"var(--blue-md)",   color:"var(--blue)"   },
+  purple: { bg:"var(--purple-lt)", border:"#C9BCF4",          color:"var(--purple)" },
+  teal:   { bg:"var(--teal-lt)",   border:"#9DD0D0",          color:"var(--teal)"   },
+  green:  { bg:"var(--green-lt)",  border:"#A7D9BB",          color:"var(--green)"  },
+};
+
+function renderTAModules() {
+  const grid = document.getElementById("ta-modules-grid");
+  if (!grid) return;
+  grid.innerHTML = TA_MODULES.map(m => {
+    const c = TA_COLORS[m.color];
+    const done = taCompleted.has(m.id);
+    return `
+    <div style="background:var(--white);border:1px solid ${done ? c.border : "var(--sand-2)"};border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:12px;transition:all 0.15s;${done ? `border-left:4px solid ${c.color};` : ""}"
+      onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.08)'" onmouseout="this.style.boxShadow='none'">
+      <div style="display:flex;align-items:flex-start;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:9px;background:${c.bg};border:1px solid ${c.border};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          ${done
+            ? `<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="${c.color}" stroke-width="2" stroke-linecap="round"><path d="M2 8l4 4 8-8"/></svg>`
+            : `<span style="font-size:12px;font-weight:700;color:${c.color};font-family:var(--mono);">${m.id}</span>`
+          }
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:13px;font-weight:600;letter-spacing:-0.01em;color:var(--ink);line-height:1.4;">${m.title}</div>
+        </div>
+        ${done ? `<span style="font-size:10px;font-family:var(--mono);background:${c.bg};color:${c.color};padding:2px 8px;border-radius:20px;font-weight:600;white-space:nowrap;">Done ✓</span>` : ""}
+      </div>
+      <p style="font-size:12px;color:var(--ink-3);line-height:1.6;margin:0;">${m.desc}</p>
+      <button onclick="toggleTAModule(${m.id}, this)"
+        style="padding:8px 0;border-radius:8px;border:1px solid ${done ? c.border : "var(--sand-2)"};background:${done ? c.bg : "var(--sand)"};color:${done ? c.color : "var(--ink-3)"};font-size:12px;font-weight:600;font-family:var(--sans);cursor:pointer;transition:all 0.15s;width:100%;">
+        ${done ? "Mark as incomplete" : "Mark as complete"}
+      </button>
+    </div>`;
+  }).join("");
+  updateTAProgress();
+}
+
+function toggleTAModule(id, btn) {
+  if (taCompleted.has(id)) taCompleted.delete(id);
+  else taCompleted.add(id);
+  renderTAModules();
+}
+
+function updateTAProgress() {
+  const n = taCompleted.size;
+  const pct = (n / TA_MODULES.length) * 100;
+  const bar = document.getElementById("ta-progress-bar");
+  const label = document.getElementById("ta-progress-label");
+  if (bar) bar.style.width = pct + "%";
+  if (label) label.textContent = `${n} of ${TA_MODULES.length} completed`;
+}
+// ── Table Snapshot ────────────────────────────────────────────────────────────
+const tableSnapshots = {};
+
+const TABLE_SNAP_COLORS = [
+  {bg:"#FFF0EA",border:"#FFD4C0",color:"#E84A00"},
+  {bg:"#E8EEF6",border:"#C2D0E4",color:"#13294B"},
+  {bg:"#E8F5EE",border:"#A7D9BB",color:"#1A6B3C"},
+  {bg:"#F0ECFC",border:"#C9BCF4",color:"#5B3FA6"},
+  {bg:"#E6F4F4",border:"#9DD0D0",color:"#0B6E6E"},
+  {bg:"#FFFBEB",border:"#FDE68A",color:"#92400E"},
+  {bg:"#FEF2F2",border:"#FCA5A5",color:"#991B1B"},
+  {bg:"#F0FDF4",border:"#86EFAC",color:"#166534"},
+];
+
+function renderTableSnapshot() {
+  const n = parseInt(document.getElementById("table-count-select")?.value || 6);
+  const grid = document.getElementById("table-snapshot-grid");
+  if (!grid) return;
+  grid.innerHTML = Array.from({length: n}, (_, i) => {
+    const id = i + 1;
+    const c = TABLE_SNAP_COLORS[i % TABLE_SNAP_COLORS.length];
+    const snap = tableSnapshots[id] || { rating: 0, note: "" };
+    return `
+    <div style="border:1px solid ${c.border};border-radius:10px;padding:12px;background:${c.bg};">
+      <div style="font-size:12px;font-weight:600;color:${c.color};margin-bottom:8px;">Table ${id}</div>
+      <div style="display:flex;gap:3px;margin-bottom:8px;">
+        ${[1,2,3,4,5].map(r => `
+          <button onclick="setTableRating(${id},${r})"
+            style="flex:1;height:26px;border:none;border-radius:5px;cursor:pointer;font-size:11px;font-weight:700;font-family:var(--mono);background:${snap.rating>=r?c.color:"var(--sand-2)"};color:${snap.rating>=r?"#fff":"var(--ink-3)"};transition:all 0.1s;">${r}</button>`).join("")}
+      </div>
+      <textarea id="table-note-${id}" placeholder="Quick note…" onchange="setTableNote(${id},this.value)"
+        style="width:100%;min-height:50px;border:1px solid ${c.border};border-radius:6px;padding:6px 8px;font-size:11px;font-family:var(--sans);color:var(--ink);background:rgba(255,255,255,0.7);outline:none;resize:none;line-height:1.5;"
+        onfocus="this.style.background='#fff'" onblur="this.style.background='rgba(255,255,255,0.7)'"
+      >${snap.note}</textarea>
+    </div>`;
+  }).join("");
+}
+
+function setTableRating(tableId, rating) {
+  if (!tableSnapshots[tableId]) tableSnapshots[tableId] = {rating:0,note:""};
+  tableSnapshots[tableId].rating = rating;
+  renderTableSnapshot();
+}
+
+function setTableNote(tableId, note) {
+  if (!tableSnapshots[tableId]) tableSnapshots[tableId] = {rating:0,note:""};
+  tableSnapshots[tableId].note = note;
+}
+
+const LIKERT_ITEMS = [
+  { id: "engagement",    label: "Student engagement" },
+  { id: "participation", label: "Student participation" },
+  { id: "confidence",    label: "My own confidence" },
+  { id: "preparedness",  label: "Preparedness for class" },
+  { id: "overall",       label: "Overall session quality" },
+];
+
+const likertValues = {};
+
+function renderLikert() {
+  const container = document.getElementById("likert-rows");
+  if (!container) return;
+  container.innerHTML = LIKERT_ITEMS.map(item => `
+    <div style="display:grid;grid-template-columns:180px repeat(5,1fr);gap:0;align-items:center;padding:8px 4px;border-radius:8px;transition:background 0.1s;"
+      onmouseover="this.style.background='var(--sand)'" onmouseout="this.style.background='transparent'">
+      <div style="font-size:12px;font-weight:500;color:var(--ink-2);padding-right:8px;">${item.label}</div>
+      ${[1,2,3,4,5].map(n => `
+        <div style="display:flex;justify-content:center;">
+          <button onclick="setLikert('${item.id}',${n},this)"
+            id="likert-${item.id}-${n}"
+            style="width:34px;height:34px;border-radius:8px;border:2px solid var(--sand-2);background:var(--sand);cursor:pointer;font-size:13px;font-weight:600;color:var(--ink-3);transition:all 0.15s;font-family:var(--mono);"
+            onmouseover="if(!this.classList.contains('selected'))this.style.borderColor='var(--orange-md)'"
+            onmouseout="if(!this.classList.contains('selected'))this.style.borderColor='var(--sand-2)'"
+          >${n}</button>
+        </div>
+      `).join("")}
+    </div>
+  `).join("");
+}
+
+function setLikert(itemId, value, btn) {
+  likertValues[itemId] = value;
+  // Reset all buttons for this row
+  [1,2,3,4,5].forEach(n => {
+    const b = document.getElementById(`likert-${itemId}-${n}`);
+    if (b) {
+      b.classList.remove("selected");
+      b.style.background = "var(--sand)";
+      b.style.borderColor = "var(--sand-2)";
+      b.style.color = "var(--ink-3)";
+    }
+  });
+  // Highlight selected
+  btn.classList.add("selected");
+  btn.style.background = "var(--orange)";
+  btn.style.borderColor = "var(--orange)";
+  btn.style.color = "#fff";
+}
+
+function saveLog() {
+  const week = document.getElementById("log-week-select").value;
+  const filled = Object.keys(likertValues).length;
+  if (filled < LIKERT_ITEMS.length) {
+    alert(`Please rate all ${LIKERT_ITEMS.length} dimensions before saving.`);
+    return;
+  }
+  const avg = (Object.values(likertValues).reduce((a,b) => a+b, 0) / LIKERT_ITEMS.length).toFixed(1);
+  alert(`✓ ${week} log saved!\nAverage rating: ${avg} / 5`);
+}
+
+// ── Navigation ──────────────────────────────────────────────────────────────
+const PAGE_META = {
+  dashboard:   { title: "Dashboard",          sub: "· PHYS 211" },
+  materials:   { title: "Materials",           sub: "· Illinois Box" },
+  grading:     { title: "Grading",             sub: "· 3 pending" },
+  teaching:    { title: "Teaching summary",    sub: "· Week 9" },
+  comms:       { title: "Coordinator comms",   sub: "· 1 unread" },
+  firstta:     { title: "First Time TA",       sub: "· 10 modules" },
+  observation: { title: "Classroom Observation", sub: "· Researcher" },
+};
+
+function showPage(id) {
+  document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
+  document.getElementById("page-" + id).classList.remove("hidden");
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+  document.querySelectorAll(".nav-item").forEach(n => {
+    if (n.getAttribute("onclick")?.includes(id)) n.classList.add("active");
+  });
+  const m = PAGE_META[id] || {};
+  document.getElementById("topbar-title").textContent = m.title || id;
+  document.getElementById("topbar-sub").textContent = m.sub || "";
+  if (id === "materials") {
+    renderWeekGrid();
+    document.getElementById("week-grid").style.display = "grid";
+    document.getElementById("week-detail").style.display = "none";
+  }
+  if (id === "teaching") { renderLikert(); renderTableSnapshot(); }
+  if (id === "firstta")  renderTAModules();
+  if (id === "observation") { renderResearchToolGrid(); showResearchTool(null); }
+}
+
+// ── Role switcher ───────────────────────────────────────────────────────────
+const ROLES = {
+  ta:         { name: "Your Name",    role: "TA · Discussion 3",        initials: "YO" },
+  coord:      { name: "Tim Stelzer",  role: "Discussion Coordinator",   initials: "TS" },
+  admin:      { name: "Prof. Zhang",  role: "Admin · PHYS 211",         initials: "PZ" },
+  researcher: { name: "Researcher",   role: "Researcher · PHYS 211",    initials: "RE" },
+};
+
+function setRole(r) {
+  document.querySelectorAll(".role-btn").forEach(b => b.classList.remove("active"));
+  document.querySelector(`.role-btn[onclick="setRole('${r}')"]`).classList.add("active");
+  const info = ROLES[r];
+  document.getElementById("user-name").textContent    = info.name;
+  document.getElementById("user-role").textContent    = info.role;
+  document.getElementById("user-avatar").textContent  = info.initials;
+  // Show observation nav only for researcher
+  const obsNav = document.getElementById("nav-observation");
+  if (obsNav) obsNav.style.display = r === "researcher" ? "flex" : "none";
+  if (r === "researcher") showPage("observation");
+}
+
+// ── Teaching mood tags ───────────────────────────────────────────────────────
+function toggleMood(btn) { btn.classList.toggle("active"); }
+
+// ── Comms send ───────────────────────────────────────────────────────────────
+function sendMsg() {
+  const input = document.getElementById("msg-input");
+  const text  = input.value.trim();
+  if (!text) return;
+  const body  = document.querySelector(".thread-body");
+  const now   = new Date().toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"});
+  body.innerHTML += `
+    <div class="msg outgoing">
+      <div class="msg-bubble">${text}</div>
+      <div class="msg-time">Today ${now}</div>
+    </div>`;
+  input.value = "";
+  body.scrollTop = body.scrollHeight;
+}
+document.getElementById("msg-input")?.addEventListener("keydown", e => {
+  if (e.key === "Enter") sendMsg();
+});
+
+// ── Date stamps ─────────────────────────────────────────────────────────────
+const now = new Date();
+const fmt  = { weekday:"long", month:"long", day:"numeric" };
+document.getElementById("today-date").textContent = now.toLocaleDateString("en-US", fmt);
+document.getElementById("log-date").textContent   = now.toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" });
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+renderWeekGrid();
+renderLikert();
+renderTableSnapshot();
+renderResearchToolGrid();
+// Set observation datetime default to now
+const dtInput = document.getElementById("obs-datetime");
+if (dtInput) dtInput.value = new Date().toISOString().slice(0,16);
+</script>
+</body>
+</html>
