@@ -1253,64 +1253,47 @@ body {
       </div>
 
       <div class="teaching-layout">
-        <!-- LEFT: Log form -->
+        <!-- LEFT: Reflections (main focus) -->
         <div>
 
-          <!-- ── Likert section ── -->
-          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:14px;padding:24px;margin-bottom:16px;">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
-              <div style="width:28px;height:28px;border-radius:7px;background:var(--orange-lt);display:flex;align-items:center;justify-content:center;">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-linecap="round"><path d="M8 1l1.8 3.6L14 5.4l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1-3-2.9 4.2-.8L8 1z"/></svg>
+          <!-- ── Challenges prompt ── -->
+          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:var(--radius);padding:24px;margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+              <div style="width:28px;height:28px;border-radius:7px;background:var(--orange-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"><path d="M8 2v8M8 13v.5"/></svg>
               </div>
-              <div>
-                <div style="font-size:13px;font-weight:600;">Session ratings</div>
-                <div style="font-size:11px;color:var(--ink-3);font-family:var(--mono);">Rate each dimension · 1 = Poor, 5 = Excellent</div>
-              </div>
-              <span style="margin-left:auto;font-size:11px;font-family:var(--mono);color:var(--ink-3);" id="log-date"></span>
+              <div style="font-size:14px;font-weight:600;color:var(--ink);">What was challenging this session?</div>
             </div>
-
-            <!-- Scale header -->
-            <div style="display:grid;grid-template-columns:180px repeat(5,1fr);gap:0;margin-bottom:10px;padding:0 4px;">
-              <div></div>
-              <div style="text-align:center;font-size:10px;font-family:var(--mono);color:var(--ink-3);">1<br><span style="font-size:9px;">Poor</span></div>
-              <div style="text-align:center;font-size:10px;font-family:var(--mono);color:var(--ink-3);">2</div>
-              <div style="text-align:center;font-size:10px;font-family:var(--mono);color:var(--ink-3);">3<br><span style="font-size:9px;">OK</span></div>
-              <div style="text-align:center;font-size:10px;font-family:var(--mono);color:var(--ink-3);">4</div>
-              <div style="text-align:center;font-size:10px;font-family:var(--mono);color:var(--ink-3);">5<br><span style="font-size:9px;">Excellent</span></div>
-            </div>
-
-            <!-- Likert rows -->
-            <div id="likert-rows" style="display:flex;flex-direction:column;gap:4px;"></div>
-
-            <!-- Legend -->
-            <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--sand-2);display:flex;align-items:center;gap:6px;">
-              <div style="width:12px;height:12px;border-radius:3px;background:var(--orange);"></div>
-              <span style="font-size:11px;color:var(--ink-3);">Selected rating</span>
-              <div style="width:12px;height:12px;border-radius:3px;background:var(--sand-2);margin-left:12px;"></div>
-              <span style="font-size:11px;color:var(--ink-3);">Not selected</span>
-            </div>
+            <p style="font-size:12px;color:var(--ink-3);line-height:1.6;margin-bottom:12px;">
+              Where did <strong>engagement, participation, or preparedness</strong> fall short? Describe a specific moment and what you think caused it.
+            </p>
+            <textarea placeholder="Describe the specific challenge, when it happened, and how students responded…" style="width:100%;min-height:160px;border:1px solid var(--sand-2);border-radius:8px;padding:12px;font-size:13px;font-family:var(--sans);color:var(--ink);background:var(--sand);outline:none;resize:vertical;line-height:1.6;" onfocus="this.style.borderColor='var(--orange-md)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--sand-2)';this.style.background='var(--sand)'"></textarea>
+            <a href="https://courses.physics.illinois.edu/phys211/sp2026/private/aristai-ta.html" target="_blank"
+              style="display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-size:12px;font-weight:600;color:var(--orange);text-decoration:none;font-family:var(--mono);"
+              onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 2v1M8 13v1M2 8h1M13 8h1"/></svg>
+              Get AristAI recommendations for this challenge ↗
+            </a>
           </div>
 
-          <!-- ── Table snapshot ── -->
-          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:14px;padding:22px;margin-bottom:16px;">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-              <div style="width:28px;height:28px;border-radius:7px;background:var(--blue-lt);display:flex;align-items:center;justify-content:center;">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round"><rect x="1" y="3" width="6" height="5" rx="1"/><rect x="9" y="3" width="6" height="5" rx="1"/><rect x="1" y="10" width="6" height="5" rx="1"/><rect x="9" y="10" width="6" height="5" rx="1"/></svg>
+          <!-- ── Highlights prompt ── -->
+          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:var(--radius);padding:24px;margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+              <div style="width:28px;height:28px;border-radius:7px;background:var(--green-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M8 1l1.5 3 3.5.5-2.5 2.5.5 3.5L8 9l-3 1.5.5-3.5L3 4.5l3.5-.5L8 1z"/></svg>
               </div>
-              <div>
-                <div style="font-size:13px;font-weight:600;">Table snapshot</div>
-                <div style="font-size:11px;color:var(--ink-3);font-family:var(--mono);">Quick rating + note per table · no individual tracking</div>
-              </div>
-              <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
-                <label style="font-size:11px;color:var(--ink-3);">Tables:</label>
-                <select id="table-count-select" class="chip-select" style="padding:4px 8px;font-size:11px;" onchange="renderTableSnapshot()">
-                  <option value="3">3</option><option value="4">4</option>
-                  <option value="5">5</option><option value="6" selected>6</option>
-                  <option value="7">7</option><option value="8">8</option>
-                </select>
-              </div>
+              <div style="font-size:14px;font-weight:600;color:var(--ink);">What went well this session?</div>
             </div>
-            <div id="table-snapshot-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;"></div>
+            <p style="font-size:12px;color:var(--ink-3);line-height:1.6;margin-bottom:12px;">
+              What drove your higher ratings in <strong>engagement, confidence, or overall quality</strong>? Describe the moment and what you'd repeat next week.
+            </p>
+            <textarea placeholder="Describe the highlight, what made it work, and what you'd do again…" style="width:100%;min-height:160px;border:1px solid var(--sand-2);border-radius:8px;padding:12px;font-size:13px;font-family:var(--sans);color:var(--ink);background:var(--sand);outline:none;resize:vertical;line-height:1.6;" onfocus="this.style.borderColor='var(--green-lt)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--sand-2)';this.style.background='var(--sand)'"></textarea>
+            <a href="https://courses.physics.illinois.edu/phys211/sp2026/private/aristai-ta.html" target="_blank"
+              style="display:inline-flex;align-items:center;gap:5px;margin-top:10px;font-size:12px;font-weight:600;color:var(--green);text-decoration:none;font-family:var(--mono);"
+              onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">
+              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 2v1M8 13v1M2 8h1M13 8h1"/></svg>
+              Get AristAI recommendations to build on this ↗
+            </a>
           </div>
 
           <!-- ── AristAI Pedagogy Recommendations ── -->
@@ -1341,7 +1324,7 @@ body {
 
         </div>
 
-        <!-- RIGHT: Insights sidebar -->
+        <!-- RIGHT: Ratings sidebar -->
         <div>
           <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:var(--ink-2);">Semester insights</div>
           <div class="insight-card">
@@ -1365,44 +1348,61 @@ body {
             <div class="sub">Avg 2.9 / 5</div>
           </div>
 
-          <!-- Challenges prompt -->
-          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:var(--radius);padding:16px;margin-top:12px;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-              <div style="width:22px;height:22px;border-radius:6px;background:var(--orange-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"><path d="M8 2v8M8 13v.5"/></svg>
+          <!-- ── Likert section ── -->
+          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:14px;padding:18px;margin-top:12px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+              <div style="width:24px;height:24px;border-radius:6px;background:var(--orange-lt);display:flex;align-items:center;justify-content:center;">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="var(--orange)" stroke-width="1.5" stroke-linecap="round"><path d="M8 1l1.8 3.6L14 5.4l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1-3-2.9 4.2-.8L8 1z"/></svg>
               </div>
-              <div style="font-size:12px;font-weight:600;color:var(--ink);">What was challenging this session?</div>
+              <div>
+                <div style="font-size:12px;font-weight:600;">Session ratings</div>
+                <div style="font-size:10px;color:var(--ink-3);font-family:var(--mono);">1 = Poor · 5 = Excellent</div>
+              </div>
+              <span style="margin-left:auto;font-size:10px;font-family:var(--mono);color:var(--ink-3);" id="log-date"></span>
             </div>
-            <p style="font-size:11px;color:var(--ink-3);line-height:1.6;margin-bottom:10px;">
-              Where did <strong>engagement, participation, or preparedness</strong> fall short? Describe a specific moment and what you think caused it.
-            </p>
-            <textarea placeholder="Describe the specific challenge, when it happened, and how students responded…" style="width:100%;min-height:100px;border:1px solid var(--sand-2);border-radius:8px;padding:10px;font-size:12px;font-family:var(--sans);color:var(--ink);background:var(--sand);outline:none;resize:vertical;line-height:1.6;" onfocus="this.style.borderColor='var(--orange-md)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--sand-2)';this.style.background='var(--sand)'"></textarea>
-            <a href="https://courses.physics.illinois.edu/phys211/sp2026/private/aristai-ta.html" target="_blank"
-              style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:11px;font-weight:600;color:var(--orange);text-decoration:none;font-family:var(--mono);"
-              onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">
-              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 2v1M8 13v1M2 8h1M13 8h1"/></svg>
-              Get AristAI recommendations for this challenge ↗
-            </a>
+
+            <!-- Scale header -->
+            <div style="display:grid;grid-template-columns:100px repeat(5,1fr);gap:0;margin-bottom:8px;padding:0 2px;">
+              <div></div>
+              <div style="text-align:center;font-size:9px;font-family:var(--mono);color:var(--ink-3);">1<br><span style="font-size:8px;">Poor</span></div>
+              <div style="text-align:center;font-size:9px;font-family:var(--mono);color:var(--ink-3);">2</div>
+              <div style="text-align:center;font-size:9px;font-family:var(--mono);color:var(--ink-3);">3<br><span style="font-size:8px;">OK</span></div>
+              <div style="text-align:center;font-size:9px;font-family:var(--mono);color:var(--ink-3);">4</div>
+              <div style="text-align:center;font-size:9px;font-family:var(--mono);color:var(--ink-3);">5<br><span style="font-size:8px;">Exc.</span></div>
+            </div>
+
+            <!-- Likert rows -->
+            <div id="likert-rows" style="display:flex;flex-direction:column;gap:4px;"></div>
+
+            <!-- Legend -->
+            <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--sand-2);display:flex;align-items:center;gap:6px;">
+              <div style="width:10px;height:10px;border-radius:3px;background:var(--orange);"></div>
+              <span style="font-size:10px;color:var(--ink-3);">Selected</span>
+              <div style="width:10px;height:10px;border-radius:3px;background:var(--sand-2);margin-left:10px;"></div>
+              <span style="font-size:10px;color:var(--ink-3);">Not selected</span>
+            </div>
           </div>
 
-          <!-- Highlights prompt -->
-          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:var(--radius);padding:16px;margin-top:10px;">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-              <div style="width:22px;height:22px;border-radius:6px;background:var(--green-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M8 1l1.5 3 3.5.5-2.5 2.5.5 3.5L8 9l-3 1.5.5-3.5L3 4.5l3.5-.5L8 1z"/></svg>
+          <!-- ── Table snapshot ── -->
+          <div style="background:var(--white);border:1px solid var(--sand-2);border-radius:14px;padding:18px;margin-top:12px;">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+              <div style="width:24px;height:24px;border-radius:6px;background:var(--blue-lt);display:flex;align-items:center;justify-content:center;">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="var(--blue)" stroke-width="1.5" stroke-linecap="round"><rect x="1" y="3" width="6" height="5" rx="1"/><rect x="9" y="3" width="6" height="5" rx="1"/><rect x="1" y="10" width="6" height="5" rx="1"/><rect x="9" y="10" width="6" height="5" rx="1"/></svg>
               </div>
-              <div style="font-size:12px;font-weight:600;color:var(--ink);">What went well this session?</div>
+              <div>
+                <div style="font-size:12px;font-weight:600;">Table snapshot</div>
+                <div style="font-size:10px;color:var(--ink-3);font-family:var(--mono);">Quick rating per table</div>
+              </div>
+              <div style="margin-left:auto;display:flex;align-items:center;gap:6px;">
+                <label style="font-size:10px;color:var(--ink-3);">Tables:</label>
+                <select id="table-count-select" class="chip-select" style="padding:3px 6px;font-size:10px;" onchange="renderTableSnapshot()">
+                  <option value="3">3</option><option value="4">4</option>
+                  <option value="5">5</option><option value="6" selected>6</option>
+                  <option value="7">7</option><option value="8">8</option>
+                </select>
+              </div>
             </div>
-            <p style="font-size:11px;color:var(--ink-3);line-height:1.6;margin-bottom:10px;">
-              What drove your higher ratings in <strong>engagement, confidence, or overall quality</strong>? Describe the moment and what you'd repeat next week.
-            </p>
-            <textarea placeholder="Describe the highlight, what made it work, and what you'd do again…" style="width:100%;min-height:100px;border:1px solid var(--sand-2);border-radius:8px;padding:10px;font-size:12px;font-family:var(--sans);color:var(--ink);background:var(--sand);outline:none;resize:vertical;line-height:1.6;" onfocus="this.style.borderColor='var(--green-lt)';this.style.background='var(--white)'" onblur="this.style.borderColor='var(--sand-2)';this.style.background='var(--sand)'"></textarea>
-            <a href="https://courses.physics.illinois.edu/phys211/sp2026/private/aristai-ta.html" target="_blank"
-              style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:11px;font-weight:600;color:var(--green);text-decoration:none;font-family:var(--mono);"
-              onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">
-              <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 2v1M8 13v1M2 8h1M13 8h1"/></svg>
-              Get AristAI recommendations to build on this ↗
-            </a>
+            <div id="table-snapshot-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;"></div>
           </div>
 
         </div>
@@ -2546,14 +2546,14 @@ function renderLikert() {
   const container = document.getElementById("likert-rows");
   if (!container) return;
   container.innerHTML = LIKERT_ITEMS.map(item => `
-    <div style="display:grid;grid-template-columns:180px repeat(5,1fr);gap:0;align-items:center;padding:8px 4px;border-radius:8px;transition:background 0.1s;"
+    <div style="display:grid;grid-template-columns:100px repeat(5,1fr);gap:0;align-items:center;padding:6px 2px;border-radius:8px;transition:background 0.1s;"
       onmouseover="this.style.background='var(--sand)'" onmouseout="this.style.background='transparent'">
-      <div style="font-size:12px;font-weight:500;color:var(--ink-2);padding-right:8px;">${item.label}</div>
+      <div style="font-size:11px;font-weight:500;color:var(--ink-2);padding-right:6px;">${item.label}</div>
       ${[1,2,3,4,5].map(n => `
         <div style="display:flex;justify-content:center;">
           <button onclick="setLikert('${item.id}',${n},this)"
             id="likert-${item.id}-${n}"
-            style="width:34px;height:34px;border-radius:8px;border:2px solid var(--sand-2);background:var(--sand);cursor:pointer;font-size:13px;font-weight:600;color:var(--ink-3);transition:all 0.15s;font-family:var(--mono);"
+            style="width:28px;height:28px;border-radius:6px;border:2px solid var(--sand-2);background:var(--sand);cursor:pointer;font-size:11px;font-weight:600;color:var(--ink-3);transition:all 0.15s;font-family:var(--mono);"
             onmouseover="if(!this.classList.contains('selected'))this.style.borderColor='var(--orange-md)'"
             onmouseout="if(!this.classList.contains('selected'))this.style.borderColor='var(--sand-2)'"
           >${n}</button>
