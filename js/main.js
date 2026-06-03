@@ -897,14 +897,58 @@ const ROLES = {
   researcher: { name: "Researcher",   role: "Researcher · PHYS 211",    initials: "RE" },
 };
 
+// ── Admin password — change this to whatever you like ───────────────────────
+const ADMIN_PASSWORD = "Admin@PHYS211";
+
+function showAdminLogin() {
+  const modal = document.getElementById("admin-modal");
+  modal.style.display = "flex";
+  document.getElementById("admin-password-input").value = "";
+  document.getElementById("admin-login-error").style.display = "none";
+  setTimeout(() => document.getElementById("admin-password-input").focus(), 50);
+}
+
+function closeAdminLogin() {
+  document.getElementById("admin-modal").style.display = "none";
+}
+
+function toggleAdminPwVisibility() {
+  const input = document.getElementById("admin-password-input");
+  const icon  = document.getElementById("pw-eye-icon");
+  if (input.type === "password") {
+    input.type = "text";
+    icon.innerHTML = '<path d="M1 8s2-5 7-5 7 5 7 5-2 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/><path d="M2 2l12 12" stroke-width="1.5"/>';
+  } else {
+    input.type = "password";
+    icon.innerHTML = '<path d="M1 8s2-5 7-5 7 5 7 5-2 5-7 5-7-5-7-5z"/><circle cx="8" cy="8" r="2"/>';
+  }
+}
+
+function submitAdminLogin() {
+  const input = document.getElementById("admin-password-input");
+  if (input.value === ADMIN_PASSWORD) {
+    closeAdminLogin();
+    setRole("admin");
+  } else {
+    const err = document.getElementById("admin-login-error");
+    err.style.display = "block";
+    input.style.borderColor = "#FCA5A5";
+    input.value = "";
+    input.focus();
+    setTimeout(() => { input.style.borderColor = "var(--sand-2)"; }, 1500);
+  }
+}
+
 function setRole(r) {
   document.querySelectorAll(".role-btn").forEach(b => b.classList.remove("active"));
-  document.querySelector(`.role-btn[onclick="setRole('${r}')"]`).classList.add("active");
+  const btn = r === "admin"
+    ? document.getElementById("admin-role-btn")
+    : document.querySelector(`.role-btn[onclick="setRole('${r}')"]`);
+  if (btn) btn.classList.add("active");
   const info = ROLES[r];
   document.getElementById("user-name").textContent    = info.name;
   document.getElementById("user-role").textContent    = info.role;
   document.getElementById("user-avatar").textContent  = info.initials;
-  // Show observation nav only for researcher
   const obsNav = document.getElementById("nav-observation");
   if (obsNav) obsNav.style.display = r === "researcher" ? "flex" : "none";
   if (r === "researcher") showPage("observation");
